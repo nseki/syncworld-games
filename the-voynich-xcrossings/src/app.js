@@ -32,12 +32,24 @@
     $('chapter-title').hidden=!chapter;
     $('chapter-position').textContent=chapter?'第'+(page.chapter+1)+'章 / 全'+manuscript.chapters.length+'章':'';
     const fragment=document.createDocumentFragment();
-    page.blocks.forEach(block=>{const p=document.createElement('p');p.textContent=block.text;if(block.kind!=='text')p.className=block.kind;fragment.appendChild(p);});
+    page.blocks.forEach(block=>{
+      if(block.kind==='table'){
+        const wrap=document.createElement('div');wrap.className='table-scroll';wrap.tabIndex=0;wrap.setAttribute('role','region');wrap.setAttribute('aria-label','比較表。横にスクロールできます');
+        const table=document.createElement('table');
+        const rows=block.text.split('\n').map(row=>row.slice(1,-1).split('|').map(cell=>cell.trim()));
+        const head=document.createElement('thead'),body=document.createElement('tbody');
+        rows.forEach((cells,i)=>{if(i===1&&cells.every(cell=>/^:?-+:?$/.test(cell)))return;const row=document.createElement('tr');cells.forEach(cell=>{const el=document.createElement(i===0?'th':'td');if(i===0)el.scope='col';el.textContent=cell;row.appendChild(el);});(i===0?head:body).appendChild(row);});
+        table.append(head,body);wrap.appendChild(table);fragment.appendChild(wrap);
+      }else{const p=document.createElement('p');p.textContent=block.text;if(block.kind!=='text')p.className=block.kind;fragment.appendChild(p);}
+    });
     $('prose').replaceChildren(fragment);
     $('reading-page').classList.toggle('card',page.blocks[0].kind==='title'||page.blocks[0].kind==='end');
     $('page-count').textContent=(pageIndex+1)+' / '+pages.length;
     $('previous').disabled=pageIndex===0;$('next').disabled=pageIndex===pages.length-1;
     $('next').textContent=pageIndex===pages.length-1?'読了':'次のページ →';
+    const route=pageIndex===pages.length-1?(story.nextRoute||story.returnRoute):null;
+    $('route-links').hidden=!route;
+    if(route){$('route-link').href=route.url;$('route-link').textContent=route.label;$('route-description').textContent=route.description||'';}
     const progress=$('progress');progress.setAttribute('aria-valuenow',String(pageIndex+1));progress.setAttribute('aria-valuemax',String(pages.length));$('progress-fill').style.width=((pageIndex+1)/pages.length*100)+'%';
     document.title=(chapter?chapter.title+' | ':'')+story.title;
     persist();window.scrollTo(0,0);if(!document.querySelector('dialog[open]'))$('reading-page').focus({preventScroll:true});
@@ -67,10 +79,11 @@
   $('font-plus').addEventListener('click',()=>{settings.font=Math.min(28,settings.font+1);applySettings();});
   $('theme-toggle').addEventListener('click',()=>{settings.theme=settings.theme==='dark'?'light':'dark';applySettings();});
   $('page-size').addEventListener('change',()=>{const anchor=pages[pageIndex].startId;settings.target=Number($('page-size').value);pages=paginate(manuscript.blocks,settings.target);pageIndex=pageForAnchor(pages,anchor);applySettings();render();});
-  $('reading-page').addEventListener('click',()=>{if(window.getSelection()?.toString())return;move(1);});
+  $('reading-page').addEventListener('click',event=>{if(event.target.closest('.table-scroll')||window.getSelection()?.toString())return;move(1);});
   document.addEventListener('keydown',event=>{
     if(event.altKey||event.ctrlKey||event.metaKey||event.isComposing||document.querySelector('dialog[open]'))return;
     if(/^(INPUT|TEXTAREA|SELECT)$/.test(event.target.tagName)||event.target.isContentEditable)return;
+    if(event.target.closest('.table-scroll'))return;
     if(event.target.closest('button')&&(event.key===' '||event.key==='Enter'))return;
     const direction=(event.key===' '?(event.shiftKey?-1:1):({'ArrowRight':1,'PageDown':1,'ArrowLeft':-1,'PageUp':-1,'Backspace':-1})[event.key]);
     if(direction){event.preventDefault();move(direction);}

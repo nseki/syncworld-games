@@ -6,7 +6,7 @@
   'use strict';
   function parseMarkdown(source) {
     const blocks = [], chapters = [], parts = [];
-    let paragraph = [], boundary = true, part = -1, chapter = -1, titleSeen = false;
+    let paragraph = [], table = [], comment = false, boundary = true, part = -1, chapter = -1, titleSeen = false;
     function add(text, kind) {
       if (!text) return;
       const item = {id: blocks.length, text, kind: kind || 'text', part, chapter, breakBefore: boundary};
@@ -15,8 +15,17 @@
       boundary = false;
     }
     function flush() { if (paragraph.length) { add(paragraph.join('\n')); paragraph = []; } }
+    function flushTable() {
+      if (!table.length) return;
+      flush(); boundary = true; add(table.join('\n'), 'table'); boundary = true; table = [];
+    }
     for (const raw of source.replace(/\r\n?/g, '\n').split('\n')) {
       const line = raw.trim();
+      if (comment || line.startsWith('<!--')) {
+        flushTable(); flush(); comment = !line.includes('-->'); continue;
+      }
+      if (line.startsWith('|') && line.endsWith('|')) { flush(); table.push(line); continue; }
+      flushTable();
       if (!line) { flush(); continue; }
       if (/^# /.test(line)) {
         flush();
@@ -41,7 +50,7 @@
       if (/^\*第.+部・了\*$/.test(line)) { flush(); add(line.slice(1,-1), 'note'); continue; }
       paragraph.push(/^\*.*\*$/.test(line) ? line.slice(1,-1) : line);
     }
-    flush();
+    flushTable(); flush();
     return {blocks, chapters, parts};
   }
   function paginate(blocks, target) {
@@ -53,11 +62,11 @@
       current = []; count = 0;
     }
     for (const block of blocks) {
-      if (block.breakBefore || block.kind === 'title' || block.kind === 'end') flush();
+      if (block.breakBefore || block.kind === 'title' || block.kind === 'end' || block.kind === 'table') flush();
       const size = Array.from(block.text).length;
       if (current.length && count + size > limit) flush();
       current.push(block); count += size;
-      if (block.kind === 'title' || block.kind === 'end') flush();
+      if (block.kind === 'title' || block.kind === 'end' || block.kind === 'table') flush();
     }
     flush(); return pages;
   }

@@ -3,17 +3,18 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark"><meta name="robots" content="noindex,nofollow">
-<meta name="description" content="『The Voynich XCrossings』第一部〜第四部＋ラーナルート・第3稿。ページ送りで読む試読版。">
+<meta name="description" content="『The Voynich XCrossings』試読版。/*__EDITION__*/。">
 <title>The Voynich XCrossings — 試読版</title>
 <style>/*__CSS__*/</style>
 </head>
 <body>
-<header class="masthead"><div><div class="brand">The Voynich XCrossings</div><div class="edition">第一部〜第四部＋ラーナルート・第3稿 ／ 試読版</div></div><nav class="tools" aria-label="読書メニュー"><button class="tool" id="contents-open" type="button">目次</button><button class="tool" id="settings-open" type="button">文字・表示</button></nav></header>
+<header class="masthead"><div><div class="brand">The Voynich XCrossings</div><div class="edition">/*__EDITION__*/ ／ 試読版</div></div><nav class="tools" aria-label="読書メニュー"><button class="tool" id="contents-open" type="button">目次</button><button class="tool" id="settings-open" type="button">文字・表示</button></nav></header>
 <div class="shell">
 <div class="chapter-head"><span id="part-label"></span><span class="position" id="chapter-position"></span></div>
 <main id="reading-page" class="sheet" tabindex="0" aria-label="本文。クリックで次のページ"><h1 class="chapter-title" id="chapter-title"></h1><div class="prose" id="prose"></div></main>
 <footer class="footer"><div class="progress" id="progress" role="progressbar" aria-label="読書の進み具合" aria-valuemin="1" aria-valuemax="1" aria-valuenow="1"><div class="progress-fill" id="progress-fill"></div></div><nav class="pager" aria-label="ページ送り"><button id="previous" class="previous" type="button">← 前のページ</button><span class="page-count" id="page-count" aria-live="polite"></span><button id="next" class="next" type="button">次のページ →</button></nav><p class="hint"><span class="desktop-hint">Space / → で次へ　← で前へ　本文のクリックでも進めます</span><span class="mobile-hint">本文のタップで次へ ／ 前へは下のボタン</span><br>読書位置はこのブラウザーに自動保存します</p><div id="toast" class="toast" role="status"></div></footer>
 </div>
+<section class="route-links" id="route-links" hidden><p id="route-description"></p><a id="route-link" href="./"></a></section>
 <dialog id="contents" aria-labelledby="contents-title"><header class="dialog-head"><h2 id="contents-title">目次</h2><button class="close" type="button" data-close="contents" aria-label="目次を閉じる">×</button></header><div class="dialog-body" id="toc-body"></div></dialog>
 <dialog id="settings" aria-labelledby="settings-title"><header class="dialog-head"><h2 id="settings-title">文字・表示</h2><button class="close" type="button" data-close="settings" aria-label="設定を閉じる">×</button></header><div class="dialog-body"><div class="settings-row"><span>文字の大きさ</span><div class="font-controls"><button id="font-minus" type="button" aria-label="文字を小さく">−</button><output id="font-value" class="font-value"></output><button id="font-plus" type="button" aria-label="文字を大きく">＋</button></div></div><div class="settings-row"><label for="page-size">1ページの長さ</label><select id="page-size"><option value="240">短め（約240字）</option><option value="360">標準（約360字）</option><option value="480">長め（約480字）</option></select></div><div class="settings-row"><span>画面の色</span><button class="tool" id="theme-toggle" type="button">夜の色にする</button></div><p class="dialog-note" style="margin-top:20px">段落と場面の切れ目でページを区切ります。表示の長さを変えても、同じ箇所から読み続けられます。</p></div></dialog>
 <noscript>ページ送りにはJavaScriptが必要です。ブラウザーの設定でJavaScriptを有効にして、再読み込みしてください。</noscript>

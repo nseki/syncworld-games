@@ -101,3 +101,32 @@ test('legacy reading positions migrate once and remain within the same chapter',
   assert.equal(core.migrateAnchor(100,'unknown',migration.revision,migration.anchorMigrations,book.blocks.length),null);
   assert.equal(map.at(-1),book.blocks.length-1);
 });
+
+test('Misha is an independent route with six intact tables and all narrative preserved',()=>{
+  const manuscript=fs.readFileSync(path.join(root,'misha/manuscript.md'),'utf8');
+  const route=core.parseMarkdown(manuscript);
+  assert.equal(route.parts.length,1);assert.equal(route.chapters.length,12);
+  const tables=route.blocks.filter(b=>b.kind==='table');assert.equal(tables.length,6);
+  const expected=manuscript.split(/\r?\n/).map(l=>l.trim()).filter(l=>l&&!/^#{1,3} /.test(l)&&l!=='＊'&&!/^---+$/.test(l)).map(l=>/^\*.*\*$/.test(l)?l.slice(1,-1):l).join('\n');
+  assert.equal(route.blocks.map(b=>b.text).join('\n'),expected);
+  assert.match(manuscript,/十一歳のころ/);assert.match(manuscript,/一六五〇年/);assert.match(manuscript,/一八三九年/);
+  for(const size of [240,360,480]){
+    const pages=core.paginate(route.blocks,size);
+    assert.deepEqual(pages.flatMap(p=>p.blocks.map(b=>b.id)),route.blocks.map(b=>b.id));
+    assert.equal(pages.filter(p=>p.blocks.some(b=>b.kind==='table')).length,6);
+    assert.ok(pages.filter(p=>p.blocks.some(b=>b.kind==='table')).every(p=>p.blocks.length===1));
+  }
+  const html=fs.readFileSync(path.join(root,'misha/index.html'),'utf8');
+  const data=JSON.parse(html.match(/<script id="story-data" type="application\/json">([\s\S]*?)<\/script>/)[1]);
+  assert.equal(data.markdown,manuscript);assert.notEqual(data.progressVersion,'c1ba2af7557bef9d');
+  assert.equal(data.returnRoute.url,'../');
+  assert.doesNotMatch(data.markdown,/執筆資料|<!--/);
+  for(const script of html.matchAll(/<script>([\s\S]*?)<\/script>/g))new (require('node:vm').Script)(script[1]);
+});
+
+test('editorial comments are hidden and do not become table cells or prose',()=>{
+  const x=core.parseMarkdown('# Book\n\n## Route\n\n### One\n\nBefore\n\n<!-- private\neditorial text -->\n\n| A | B |\n| --- | --- |\n| <script> | safe |\n\nAfter');
+  assert.deepEqual(x.blocks.map(b=>b.kind),['text','table','text']);
+  assert.equal(x.blocks[0].text,'Before');assert.equal(x.blocks[2].text,'After');
+  assert.doesNotMatch(x.blocks.map(b=>b.text).join(''),/private|editorial/);
+});
