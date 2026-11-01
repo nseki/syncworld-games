@@ -1,6 +1,6 @@
 # The Voynich XCrossings
 
-共通部第一〜四部・第4稿のWeb試読版。個別ルートは現在の公開範囲から外しています。旧原稿は別に保持しています。
+共通部第一〜四部・第4稿のWeb試読版。ラーナ・ミーシャの第4稿を独立した試読ページで公開しています。共通部の読了後に選べます。
 
 公開先: https://games.syncworld.net/the-voynich-xcrossings/
 
@@ -22,4 +22,4 @@ python3 build.py
 node --test tests/reader.test.cjs
 ```
 
-`index.html` は外部依存のない単独HTMLです。`reading-migrations.json` は第3稿の各版から第4稿への段落対応を含みます。`misha/index.html` は旧ブックマーク用の案内だけを表示し、本文や次ルートのリンクは公開しません。
+`index.html` は外部依存のない単独HTMLです。`reading-migrations.json` は第3稿の各版から第4稿への段落対応を含みます。`rana/` と `misha/` は共通第四部から分岐する独立したルートで、それぞれ読書位置を保存します。共通部の読書位置は維持します。

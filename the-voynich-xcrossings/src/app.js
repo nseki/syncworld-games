@@ -47,9 +47,11 @@
     $('page-count').textContent=(pageIndex+1)+' / '+pages.length;
     $('previous').disabled=pageIndex===0;$('next').disabled=pageIndex===pages.length-1;
     $('next').textContent=pageIndex===pages.length-1?'読了':'次のページ →';
-    const route=pageIndex===pages.length-1?(story.nextRoute||story.returnRoute):null;
-    $('route-links').hidden=!route;
-    if(route){$('route-link').href=route.url;$('route-link').textContent=route.label;$('route-description').textContent=route.description||'';}
+    const routes=pageIndex===pages.length-1?(story.routes||[story.nextRoute||story.returnRoute].filter(Boolean)):[];
+    const links=$('route-links');links.hidden=!routes.length;
+    const routeFragment=document.createDocumentFragment();
+    routes.forEach(route=>{const item=document.createElement('div');const description=document.createElement('p');description.textContent=route.description||'';const link=document.createElement('a');link.href=route.url;link.textContent=route.label;item.append(description,link);routeFragment.appendChild(item);});
+    links.replaceChildren(routeFragment);
     const progress=$('progress');progress.setAttribute('aria-valuenow',String(pageIndex+1));progress.setAttribute('aria-valuemax',String(pages.length));$('progress-fill').style.width=((pageIndex+1)/pages.length*100)+'%';
     document.title=(chapter?chapter.title+' | ':'')+story.title;
     persist();window.scrollTo(0,0);if(!document.querySelector('dialog[open]'))$('reading-page').focus({preventScroll:true});

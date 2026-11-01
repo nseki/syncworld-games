@@ -17,6 +17,16 @@ def build(story, destination):
   html = html.replace(marker,value)
  destination.write_text(html,encoding='utf-8')
  print(json.dumps({'output':str(destination.relative_to(ROOT)),'version':story['version'],'manuscript_characters':len(story['markdown']),'bytes':len(html.encode())},ensure_ascii=False))
+story['routes'] = [
+ {'url':'./rana/?draft=4', 'label':'ラーナルートを読む', 'description':'共通第四部から、町の設備と地図の調査を進める展開です。'},
+ {'url':'./misha/?draft=4', 'label':'ミーシャルートを読む', 'description':'共通第四部から、研究記録の調査を進める別の展開です。'}]
 build(story, ROOT/'index.html')
-holding = """<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>試読範囲の更新 | The Voynich XCrossings</title><style>body{font-family:system-ui,sans-serif;line-height:1.9;background:#f3f1e9;color:#293630;margin:0}main{max-width:36rem;margin:12vh auto;padding:2rem}a{color:#315740}h1{font-size:1.4rem}</style></head><body><main><h1>試読範囲を更新しました</h1><p>現在は共通部第一〜四部の第4稿を公開しています。個別ルートの試読は、いったんお休みしています。</p><a href="../?draft=4">共通部・第4稿を読む →</a></main></body></html>"""
-(ROOT/'misha/index.html').write_text(holding, encoding='utf-8')
+for slug, name in [('rana','ラーナ'),('misha','ミーシャ')]:
+ text = (ROOT/slug/'manuscript.md').read_text()
+ route = {'title':story['title'], 'edition':name+'ルート・第4稿（共通第四部から分岐）',
+  'markdown':text, 'version':hashlib.sha256(text.encode()).hexdigest()[:16],
+  'progressVersion':slug+'-draft4-reader-v1', 'progressRevision':slug+'-draft4-v1', 'anchorMigrations':{},
+  'routes':[{'url':'../?draft=4','label':'共通部へ戻る','description':'共通第四部から分岐する独立したルートです。'}]}
+ if slug == 'rana':
+  route['routes'].insert(0, {'url':'../misha/?draft=4','label':'ミーシャルートを読む','description':'共通第四部から別の調査を選んだ展開です。ラーナルートの続編ではありません。'})
+ build(route, ROOT/slug/'index.html')

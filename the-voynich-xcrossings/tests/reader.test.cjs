@@ -56,13 +56,13 @@ test('standalone HTML includes exact authoritative manuscript and no external de
   for(const script of html.matchAll(/<script>([\s\S]*?)<\/script>/g))new (require('node:vm').Script)(script[1]);
 });
 
-test('fourth draft keeps the existing progress storage and does not offer a route link',()=>{
+test('fourth draft preserves common progress and offers two independent routes',()=>{
   const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
   const story=JSON.parse(html.match(/<script id="story-data" type="application\/json">([\s\S]*?)<\/script>/)[1]);
   assert.equal(story.progressVersion,'c1ba2af7557bef9d');
   assert.equal(story.progressRevision,'draft4-v1');
   assert.equal(story.edition,'共通部第一〜四部・第4稿');
-  assert.equal(story.nextRoute,undefined);assert.equal(story.returnRoute,undefined);
+  assert.deepEqual(story.routes.map(r=>r.url),['./rana/?draft=4','./misha/?draft=4']);
   assert.match(html,/story\.progressVersion\|\|story\.version/);
 });
 
@@ -95,12 +95,28 @@ test('both third-draft revisions migrate monotonically within the same common ch
   assert.equal(core.migrateAnchor(100,'unknown',migration.revision,migration.anchorMigrations,book.blocks.length),null);
 });
 
-test('old route URL contains a holding page and no old story or embedded manuscript',()=>{
-  const html=fs.readFileSync(path.join(root,'misha/index.html'),'utf8');
-  assert.match(html,/試読範囲を更新しました/);
-  assert.match(html,/href="\.\.\/\?draft=4"/);
-  assert.doesNotMatch(html,/story-data|帰還せず|第3稿/);
-  assert.equal(fs.existsSync(path.join(root,'misha/manuscript.md')),false);
+test('both fourth-draft routes publish complete independent manuscripts with isolated progress',()=>{
+  const keys=new Set(['c1ba2af7557bef9d']);
+  for(const [slug,tableCount] of [['rana',0],['misha',6]]){
+    const manuscript=fs.readFileSync(path.join(root,slug,'manuscript.md'),'utf8');
+    const route=core.parseMarkdown(manuscript);
+    assert.equal(route.parts.length,1);assert.equal(route.chapters.length,12);
+    assert.equal(route.blocks.filter(b=>b.kind==='table').length,tableCount);
+    const expected=manuscript.split(/\r?\n/).map(l=>l.trim()).filter(l=>l&&!/^#{1,3} /.test(l)&&l!=='＊'&&!/^---+$/.test(l)).map(l=>/^\*.*\*$/.test(l)?l.slice(1,-1):l).join('\n');
+    assert.equal(route.blocks.map(b=>b.text).join('\n'),expected);
+    const html=fs.readFileSync(path.join(root,slug,'index.html'),'utf8');
+    const data=JSON.parse(html.match(/<script id="story-data" type="application\/json">([\s\S]*?)<\/script>/)[1]);
+    assert.equal(data.markdown,manuscript);assert.match(data.edition,/第4稿/);
+    assert.ok(!keys.has(data.progressVersion));keys.add(data.progressVersion);
+    assert.ok(data.routes.some(r=>r.url==='../?draft=4'));
+    for(const size of [240,360,480]){
+      const pages=core.paginate(route.blocks,size);
+      assert.deepEqual(pages.flatMap(p=>p.blocks.map(b=>b.id)),route.blocks.map(b=>b.id));
+      assert.equal(pages.at(-1).blocks.length,1);
+      assert.ok(pages.filter(p=>p.blocks.some(b=>b.kind==='table')).every(p=>p.blocks.length===1));
+    }
+    for(const script of html.matchAll(/<script>([\s\S]*?)<\/script>/g))new (require('node:vm').Script)(script[1]);
+  }
 });
 
 test('editorial comments are hidden and do not become table cells or prose',()=>{
