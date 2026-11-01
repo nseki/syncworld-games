@@ -1,7 +1,7 @@
 (function(){
   'use strict';
   const story = JSON.parse(document.getElementById('story-data').textContent);
-  const {parseMarkdown,paginate,pageForAnchor,validAnchor} = ReaderCore;
+  const {parseMarkdown,paginate,pageForAnchor,validAnchor,migrateAnchor} = ReaderCore;
   const manuscript = parseMarkdown(story.markdown);
   const $ = id => document.getElementById(id);
   const keys={settings:'yakusoku-reader-settings-v1',progress:'yakusoku-reader-'+(story.progressVersion||story.version)};
@@ -13,15 +13,17 @@
   const allowed=[240,360,480];
   const settings={font:Number.isFinite(stored.font)?Math.max(16,Math.min(28,stored.font)):(mobile?18:21),target:allowed.includes(stored.target)?stored.target:(mobile?240:360),theme:['light','dark'].includes(stored.theme)?stored.theme:(window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light')};
   const restored=load(keys.progress)||{};
-  const hashAnchor=validAnchor(new URLSearchParams(location.hash.slice(1)).get('at'),manuscript.blocks.length);
-  const resumeAnchor=validAnchor(restored.anchor,manuscript.blocks.length);
+  const anchorFrom=(value,revision)=>migrateAnchor(value,revision,story.progressRevision,story.anchorMigrations,manuscript.blocks.length);
+  const hashParams=new URLSearchParams(location.hash.slice(1));
+  const hashAnchor=anchorFrom(hashParams.get('at'),hashParams.get('rev'));
+  const resumeAnchor=anchorFrom(restored.anchor,restored.revision);
   let pages=paginate(manuscript.blocks,settings.target);
   let pageIndex=pageForAnchor(pages,hashAnchor===null?(resumeAnchor||0):hashAnchor);
-  let maxVisited=validAnchor(restored.maxVisited,manuscript.blocks.length)||0;
+  let maxVisited=anchorFrom(restored.maxVisited,restored.revision)||0;
   let toastTimer;
   function toast(message){$('toast').textContent=message;clearTimeout(toastTimer);toastTimer=setTimeout(()=>{$('toast').textContent='';},4000);}
   function applySettings(){document.documentElement.dataset.theme=settings.theme;document.documentElement.style.setProperty('--reading-size',settings.font+'px');$('font-value').textContent=settings.font+'px';$('font-minus').disabled=settings.font<=16;$('font-plus').disabled=settings.font>=28;$('page-size').value=String(settings.target);$('theme-toggle').textContent=settings.theme==='dark'?'紙の色にする':'夜の色にする';save(keys.settings,settings);}
-  function persist(){const anchor=pages[pageIndex].startId;maxVisited=Math.max(maxVisited,pages[pageIndex].endId);save(keys.progress,{anchor,maxVisited});try{history.replaceState(null,'','#at='+anchor);}catch(_){}if(!storageAvailable)$('toast').textContent='このブラウザーでは読書位置を保存できません。';}
+  function persist(){const anchor=pages[pageIndex].startId;maxVisited=Math.max(maxVisited,pages[pageIndex].endId);save(keys.progress,{anchor,maxVisited,revision:story.progressRevision});try{history.replaceState(null,'','#at='+anchor+'&rev='+encodeURIComponent(story.progressRevision));}catch(_){}if(!storageAvailable)$('toast').textContent='このブラウザーでは読書位置を保存できません。';}
   function render(){
     const page=pages[pageIndex];if(!page)return;
     const chapter=manuscript.chapters[page.chapter];const part=manuscript.parts[page.part];
@@ -73,7 +75,7 @@
     const direction=(event.key===' '?(event.shiftKey?-1:1):({'ArrowRight':1,'PageDown':1,'ArrowLeft':-1,'PageUp':-1,'Backspace':-1})[event.key]);
     if(direction){event.preventDefault();move(direction);}
   });
-  window.addEventListener('hashchange',()=>{const anchor=validAnchor(new URLSearchParams(location.hash.slice(1)).get('at'),manuscript.blocks.length);if(anchor!==null){pageIndex=pageForAnchor(pages,anchor);render();}});
+  window.addEventListener('hashchange',()=>{const params=new URLSearchParams(location.hash.slice(1));const anchor=anchorFrom(params.get('at'),params.get('rev'));if(anchor!==null){pageIndex=pageForAnchor(pages,anchor);render();}});
   applySettings();render();
   if(hashAnchor===null&&resumeAnchor>0)toast('前回の続きから再開しました。');
 })();

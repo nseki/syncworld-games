@@ -6,6 +6,13 @@ const core = require('../src/reader-core.js');
 const root = path.resolve(__dirname,'..');
 const source = fs.readFileSync(path.join(root,'manuscript.md'),'utf8');
 const book = core.parseMarkdown(source);
+const LEGACY_SURVIVING_ANCHORS = [
+  [1030,'「前世の記憶が残ることと、関係があるんですか」'],
+  [1209,'「私は覚えてた。でも、ほかの人に見せられなかった」'],
+  [1657,'「あなた自身にも、今の人生より前の記憶があるのですか」'],
+  [1744,'現地へ入れるという返事が来たのは、翌朝だった。'],
+  [2367,'ラーナルート・了']
+];
 
 test('third draft contains four common parts and the complete Rana route',()=>{
   assert.equal(book.parts.length,5);assert.equal(book.chapters.length,40);
@@ -66,15 +73,31 @@ test('appending parts preserves existing paragraph IDs and reading progress',()=
   assert.match(html,/story\.progressVersion\|\|story\.version/);
 });
 
-test('editing common prose retains all existing chapter and paragraph positions',()=>{
-  const positions=book.blocks.slice(0,1744).map(({text,...position})=>position);
-  assert.equal(require('node:crypto').createHash('sha256').update(JSON.stringify(positions)).digest('hex'),'8128a077561ffb5837d9a9883d43484b977146f5e7df6f052adfb467d722b0ef');
-  assert.equal(book.blocks[1743].text,'第四部・了');
-  assert.equal(book.blocks[1744].text,'現地へ入れるという返事が来たのは、翌朝だった。');
+test('the route ending occupies its own page at every supported page length',()=>{
   for(const size of [240,360,480]){
     const pages=core.paginate(book.blocks,size);
     const end=pages.at(-1);
     assert.equal(end.blocks.length,1);
     assert.equal(end.blocks[0].kind,'end');
   }
+});
+
+test('legacy reading positions migrate once and remain within the same chapter',()=>{
+  const migration=JSON.parse(fs.readFileSync(path.join(root,'reading-migrations.json'),'utf8'));
+  const map=migration.anchorMigrations.legacy;
+  assert.equal(map.length,2368);
+  assert.deepEqual(map.slice(0,889),Array.from({length:889},(_,i)=>i));
+  assert.ok(map.every((n,i)=>Number.isInteger(n)&&n>=0&&n<book.blocks.length&&(i===0||n>=map[i-1])));
+  const starts=[0,100,149,211,270,328,363,421,497,561,622,715,788,842,889,953,1009,1074,1123,1177,1259,1291,1352,1440,1525,1584,1630,1682,1744,1774,1810,1863,1903,1948,2008,2074,2118,2179,2237,2285];
+  starts.forEach((start,chapter)=>{
+    for(let i=start;i<(starts[chapter+1]??map.length);i++)assert.equal(book.blocks[map[i]].chapter,chapter);
+  });
+  for(const [oldAnchor,text] of LEGACY_SURVIVING_ANCHORS){
+    const current=core.migrateAnchor(oldAnchor,null,migration.revision,migration.anchorMigrations,book.blocks.length);
+    assert.equal(book.blocks[current].text,text);
+    assert.equal(core.migrateAnchor(current,migration.revision,migration.revision,migration.anchorMigrations,book.blocks.length),current);
+  }
+  for(const value of [null,'',-1,'NaN',2368])assert.equal(core.migrateAnchor(value,null,migration.revision,migration.anchorMigrations,book.blocks.length),null);
+  assert.equal(core.migrateAnchor(100,'unknown',migration.revision,migration.anchorMigrations,book.blocks.length),null);
+  assert.equal(map.at(-1),book.blocks.length-1);
 });

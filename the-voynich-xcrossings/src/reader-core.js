@@ -70,5 +70,12 @@
     const n = Number(value);
     return value !== null && value !== '' && Number.isInteger(n) && n >= 0 && n < length ? n : null;
   }
-  return {parseMarkdown, paginate, pageForAnchor, validAnchor};
+  function migrateAnchor(value, sourceRevision, targetRevision, migrations, length) {
+    if (sourceRevision === targetRevision) return validAnchor(value, length);
+    const map = migrations && migrations[sourceRevision || 'legacy'];
+    if (!Array.isArray(map)) return null;
+    const index = validAnchor(value, map.length);
+    return index === null ? null : validAnchor(map[index], length);
+  }
+  return {parseMarkdown, paginate, pageForAnchor, validAnchor, migrateAnchor};
 });
