@@ -4,7 +4,7 @@
   const {parseMarkdown,paginate,pageForAnchor,validAnchor} = ReaderCore;
   const manuscript = parseMarkdown(story.markdown);
   const $ = id => document.getElementById(id);
-  const keys={settings:'yakusoku-reader-settings-v1',progress:'yakusoku-reader-'+story.version};
+  const keys={settings:'yakusoku-reader-settings-v1',progress:'yakusoku-reader-'+(story.progressVersion||story.version)};
   let storageAvailable=true;
   function load(key){try{return JSON.parse(localStorage.getItem(key)||'null');}catch(_){return null;}}
   function save(key,value){try{localStorage.setItem(key,JSON.stringify(value));}catch(_){storageAvailable=false;}}

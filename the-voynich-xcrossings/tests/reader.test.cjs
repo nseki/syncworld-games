@@ -7,10 +7,10 @@ const root = path.resolve(__dirname,'..');
 const source = fs.readFileSync(path.join(root,'manuscript.md'),'utf8');
 const book = core.parseMarkdown(source);
 
-test('third draft contains the first two parts and 14 chapters',()=>{
-  assert.equal(book.parts.length,2);assert.equal(book.chapters.length,14);
+test('third draft contains the first four parts and 28 chapters',()=>{
+  assert.equal(book.parts.length,4);assert.equal(book.chapters.length,28);
   assert.equal(book.blocks[0].text,'「戻らないで！」');
-  assert.match(book.blocks.at(-1).text,/第二部・了/);
+  assert.match(book.blocks.at(-1).text,/第四部・了/);
   assert.ok(book.chapters.every(c=>Number.isInteger(c.startId)));
 });
 test('every prose line is preserved, in order, with no duplicates',()=>{
@@ -53,4 +53,13 @@ test('standalone HTML includes exact authoritative manuscript and no external de
   assert.doesNotMatch(html,/<(?:script|link)[^>]*(?:src|href)=["']https?:/);
   assert.doesNotMatch(html,/\/\*__(?:CSS|STORY|CORE|APP)__\*\//);
   for(const script of html.matchAll(/<script>([\s\S]*?)<\/script>/g))new (require('node:vm').Script)(script[1]);
+});
+
+test('appending parts preserves existing paragraph IDs and reading progress',()=>{
+  const prefix=book.blocks.slice(0,889);
+  assert.equal(require('node:crypto').createHash('sha256').update(JSON.stringify(prefix)).digest('hex'),'c7f6206056e6fbffcd533cab113a121bc0920035904e86107f2226429340d7e6');
+  const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
+  const story=JSON.parse(html.match(/<script id="story-data" type="application\/json">([\s\S]*?)<\/script>/)[1]);
+  assert.equal(story.progressVersion,'c1ba2af7557bef9d');
+  assert.match(html,/story\.progressVersion\|\|story\.version/);
 });
