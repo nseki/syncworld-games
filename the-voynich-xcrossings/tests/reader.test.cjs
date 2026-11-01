@@ -6,19 +6,11 @@ const core = require('../src/reader-core.js');
 const root = path.resolve(__dirname,'..');
 const source = fs.readFileSync(path.join(root,'manuscript.md'),'utf8');
 const book = core.parseMarkdown(source);
-const LEGACY_SURVIVING_ANCHORS = [
-  [1030,'「前世の記憶が残ることと、関係があるんですか」'],
-  [1209,'「私は覚えてた。でも、ほかの人に見せられなかった」'],
-  [1657,'「あなた自身にも、今の人生より前の記憶があるのですか」'],
-  [1744,'現地へ入れるという返事が来たのは、翌朝だった。'],
-  [2367,'ラーナルート・了']
-];
-
-test('third draft contains four common parts and the complete Rana route',()=>{
-  assert.equal(book.parts.length,5);assert.equal(book.chapters.length,40);
+test('fourth draft publishes exactly four common parts and 28 chapters',()=>{
+  assert.equal(book.parts.length,4);assert.equal(book.chapters.length,28);
   assert.equal(book.blocks[0].text,'「戻らないで！」');
-  assert.equal(book.parts.at(-1).title,'ラーナルート　帰り道のある町');
-  assert.equal(book.blocks.at(-1).text,'ラーナルート・了');
+  assert.equal(book.parts.at(-1).title,'第四部　助けた理由');
+  assert.equal(book.blocks.at(-1).text,'共通部・第4稿　試読ここまで');
   assert.equal(book.blocks.at(-1).kind,'end');
   assert.ok(book.chapters.every(c=>Number.isInteger(c.startId)));
 });
@@ -64,16 +56,17 @@ test('standalone HTML includes exact authoritative manuscript and no external de
   for(const script of html.matchAll(/<script>([\s\S]*?)<\/script>/g))new (require('node:vm').Script)(script[1]);
 });
 
-test('appending parts preserves existing paragraph IDs and reading progress',()=>{
-  const prefix=book.blocks.slice(0,889);
-  assert.equal(require('node:crypto').createHash('sha256').update(JSON.stringify(prefix)).digest('hex'),'c7f6206056e6fbffcd533cab113a121bc0920035904e86107f2226429340d7e6');
+test('fourth draft keeps the existing progress storage and does not offer a route link',()=>{
   const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
   const story=JSON.parse(html.match(/<script id="story-data" type="application\/json">([\s\S]*?)<\/script>/)[1]);
   assert.equal(story.progressVersion,'c1ba2af7557bef9d');
+  assert.equal(story.progressRevision,'draft4-v1');
+  assert.equal(story.edition,'共通部第一〜四部・第4稿');
+  assert.equal(story.nextRoute,undefined);assert.equal(story.returnRoute,undefined);
   assert.match(html,/story\.progressVersion\|\|story\.version/);
 });
 
-test('the route ending occupies its own page at every supported page length',()=>{
+test('the preview ending occupies its own page at every supported page length',()=>{
   for(const size of [240,360,480]){
     const pages=core.paginate(book.blocks,size);
     const end=pages.at(-1);
@@ -82,46 +75,32 @@ test('the route ending occupies its own page at every supported page length',()=
   }
 });
 
-test('legacy reading positions migrate once and remain within the same chapter',()=>{
+test('both third-draft revisions migrate monotonically within the same common chapter',()=>{
   const migration=JSON.parse(fs.readFileSync(path.join(root,'reading-migrations.json'),'utf8'));
-  const map=migration.anchorMigrations.legacy;
-  assert.equal(map.length,2368);
-  assert.deepEqual(map.slice(0,889),Array.from({length:889},(_,i)=>i));
-  assert.ok(map.every((n,i)=>Number.isInteger(n)&&n>=0&&n<book.blocks.length&&(i===0||n>=map[i-1])));
-  const starts=[0,100,149,211,270,328,363,421,497,561,622,715,788,842,889,953,1009,1074,1123,1177,1259,1291,1352,1440,1525,1584,1630,1682,1744,1774,1810,1863,1903,1948,2008,2074,2118,2179,2237,2285];
-  starts.forEach((start,chapter)=>{
-    for(let i=start;i<(starts[chapter+1]??map.length);i++)assert.equal(book.blocks[map[i]].chapter,chapter);
-  });
-  for(const [oldAnchor,text] of LEGACY_SURVIVING_ANCHORS){
-    const current=core.migrateAnchor(oldAnchor,null,migration.revision,migration.anchorMigrations,book.blocks.length);
-    assert.equal(book.blocks[current].text,text);
-    assert.equal(core.migrateAnchor(current,migration.revision,migration.revision,migration.anchorMigrations,book.blocks.length),current);
+  assert.equal(migration.anchorMigrations.legacy.length,2368);
+  assert.equal(migration.anchorMigrations['tightened-v1'].length,2237);
+  for(const revision of ['legacy','tightened-v1']){
+    const map=migration.anchorMigrations[revision],starts=migration.sourceChapterStarts[revision];
+    assert.ok(map.every((n,i)=>Number.isInteger(n)&&n>=0&&n<book.blocks.length&&(i===0||n>=map[i-1])));
+    starts.forEach((start,chapter)=>{
+      for(let i=start;i<(starts[chapter+1]??map.length);i++){
+        if(chapter<28)assert.equal(book.blocks[map[i]].chapter,chapter);
+        else assert.equal(map[i],book.blocks.length-1);
+        const target=core.migrateAnchor(i,revision,migration.revision,migration.anchorMigrations,book.blocks.length);
+        assert.equal(target,map[i]);
+        assert.equal(core.migrateAnchor(target,migration.revision,migration.revision,migration.anchorMigrations,book.blocks.length),target);
+      }
+    });
   }
-  for(const value of [null,'',-1,'NaN',2368])assert.equal(core.migrateAnchor(value,null,migration.revision,migration.anchorMigrations,book.blocks.length),null);
   assert.equal(core.migrateAnchor(100,'unknown',migration.revision,migration.anchorMigrations,book.blocks.length),null);
-  assert.equal(map.at(-1),book.blocks.length-1);
 });
 
-test('Misha is an independent route with six intact tables and all narrative preserved',()=>{
-  const manuscript=fs.readFileSync(path.join(root,'misha/manuscript.md'),'utf8');
-  const route=core.parseMarkdown(manuscript);
-  assert.equal(route.parts.length,1);assert.equal(route.chapters.length,12);
-  const tables=route.blocks.filter(b=>b.kind==='table');assert.equal(tables.length,6);
-  const expected=manuscript.split(/\r?\n/).map(l=>l.trim()).filter(l=>l&&!/^#{1,3} /.test(l)&&l!=='＊'&&!/^---+$/.test(l)).map(l=>/^\*.*\*$/.test(l)?l.slice(1,-1):l).join('\n');
-  assert.equal(route.blocks.map(b=>b.text).join('\n'),expected);
-  assert.match(manuscript,/十一歳のころ/);assert.match(manuscript,/一六五〇年/);assert.match(manuscript,/一八三九年/);
-  for(const size of [240,360,480]){
-    const pages=core.paginate(route.blocks,size);
-    assert.deepEqual(pages.flatMap(p=>p.blocks.map(b=>b.id)),route.blocks.map(b=>b.id));
-    assert.equal(pages.filter(p=>p.blocks.some(b=>b.kind==='table')).length,6);
-    assert.ok(pages.filter(p=>p.blocks.some(b=>b.kind==='table')).every(p=>p.blocks.length===1));
-  }
+test('old route URL contains a holding page and no old story or embedded manuscript',()=>{
   const html=fs.readFileSync(path.join(root,'misha/index.html'),'utf8');
-  const data=JSON.parse(html.match(/<script id="story-data" type="application\/json">([\s\S]*?)<\/script>/)[1]);
-  assert.equal(data.markdown,manuscript);assert.notEqual(data.progressVersion,'c1ba2af7557bef9d');
-  assert.equal(data.returnRoute.url,'../');
-  assert.doesNotMatch(data.markdown,/執筆資料|<!--/);
-  for(const script of html.matchAll(/<script>([\s\S]*?)<\/script>/g))new (require('node:vm').Script)(script[1]);
+  assert.match(html,/試読範囲を更新しました/);
+  assert.match(html,/href="\.\.\/\?draft=4"/);
+  assert.doesNotMatch(html,/story-data|帰還せず|第3稿/);
+  assert.equal(fs.existsSync(path.join(root,'misha/manuscript.md')),false);
 });
 
 test('editorial comments are hidden and do not become table cells or prose',()=>{
