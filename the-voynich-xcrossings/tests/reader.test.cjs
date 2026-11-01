@@ -7,10 +7,12 @@ const root = path.resolve(__dirname,'..');
 const source = fs.readFileSync(path.join(root,'manuscript.md'),'utf8');
 const book = core.parseMarkdown(source);
 
-test('third draft contains the first four parts and 28 chapters',()=>{
-  assert.equal(book.parts.length,4);assert.equal(book.chapters.length,28);
+test('third draft contains four common parts and the complete Rana route',()=>{
+  assert.equal(book.parts.length,5);assert.equal(book.chapters.length,40);
   assert.equal(book.blocks[0].text,'「戻らないで！」');
-  assert.match(book.blocks.at(-1).text,/第四部・了/);
+  assert.equal(book.parts.at(-1).title,'ラーナルート　帰り道のある町');
+  assert.equal(book.blocks.at(-1).text,'ラーナルート・了');
+  assert.equal(book.blocks.at(-1).kind,'end');
   assert.ok(book.chapters.every(c=>Number.isInteger(c.startId)));
 });
 test('every prose line is preserved, in order, with no duplicates',()=>{
@@ -62,4 +64,17 @@ test('appending parts preserves existing paragraph IDs and reading progress',()=
   const story=JSON.parse(html.match(/<script id="story-data" type="application\/json">([\s\S]*?)<\/script>/)[1]);
   assert.equal(story.progressVersion,'c1ba2af7557bef9d');
   assert.match(html,/story\.progressVersion\|\|story\.version/);
+});
+
+test('editing common prose retains all existing chapter and paragraph positions',()=>{
+  const positions=book.blocks.slice(0,1744).map(({text,...position})=>position);
+  assert.equal(require('node:crypto').createHash('sha256').update(JSON.stringify(positions)).digest('hex'),'8128a077561ffb5837d9a9883d43484b977146f5e7df6f052adfb467d722b0ef');
+  assert.equal(book.blocks[1743].text,'第四部・了');
+  assert.equal(book.blocks[1744].text,'現地へ入れるという返事が来たのは、翌朝だった。');
+  for(const size of [240,360,480]){
+    const pages=core.paginate(book.blocks,size);
+    const end=pages.at(-1);
+    assert.equal(end.blocks.length,1);
+    assert.equal(end.blocks[0].kind,'end');
+  }
 });

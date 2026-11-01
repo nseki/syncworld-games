@@ -2,7 +2,7 @@ from pathlib import Path
 import json, hashlib
 ROOT = Path(__file__).resolve().parent
 source = (ROOT / 'manuscript.md').read_text(encoding='utf-8')
-story = {'title':'The Voynich XCrossings', 'edition':'第一部〜第四部・第3稿', 'version':hashlib.sha256(source.encode()).hexdigest()[:16], 'markdown':source, 'progressVersion':'c1ba2af7557bef9d'}
+story = {'title':'The Voynich XCrossings', 'edition':'第一部〜第四部＋ラーナルート・第3稿', 'version':hashlib.sha256(source.encode()).hexdigest()[:16], 'markdown':source, 'progressVersion':'c1ba2af7557bef9d'}
 html = (ROOT / 'src/template.html').read_text()
 for marker, value in {
  '/*__CSS__*/':(ROOT/'src/reader.css').read_text(),

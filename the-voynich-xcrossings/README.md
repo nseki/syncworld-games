@@ -1,6 +1,6 @@
 # The Voynich XCrossings
 
-第一部〜第四部・第3稿のWeb試読版。背景・立ち絵・音声・分岐を付けず、ページ送りで文章のテンポを確認します。
+第一部〜第四部＋ラーナルート・第3稿のWeb試読版。背景・立ち絵・音声・分岐を付けず、ページ送りで文章のテンポを確認します。
 
 公開先: https://games.syncworld.net/the-voynich-xcrossings/
 
@@ -23,5 +23,5 @@ python3 build.py
 node --test tests/reader.test.cjs
 ```
 
-現在は第一部〜第四部の第3稿を公開しています。
+現在は第三部・第四部を改修した共通部と、ラーナルートの第3稿を公開しています。
 GUIブラウザーでの表示確認は未実施です。

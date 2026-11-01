@@ -37,6 +37,7 @@
       if (line === '＊' || /^---+$/.test(line)) { flush(); boundary = true; continue; }
       if (/^\*全六部/.test(line) || line === '*タイトル*') { flush(); continue; }
       if (/^\*.*完\*$/.test(line)) { flush(); boundary = true; add(line.slice(1,-1), 'end'); boundary = true; continue; }
+      if (/^\*.+ルート・了\*$/.test(line)) { flush(); boundary = true; add(line.slice(1,-1), 'end'); boundary = true; continue; }
       if (/^\*第.+部・了\*$/.test(line)) { flush(); add(line.slice(1,-1), 'note'); continue; }
       paragraph.push(/^\*.*\*$/.test(line) ? line.slice(1,-1) : line);
     }
