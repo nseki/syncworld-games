@@ -1,6 +1,6 @@
 # The Voynich XCrossings
 
-全六部・第2稿のWeb試読版。背景・立ち絵・音声・分岐を付けず、ページ送りで文章のテンポを確認します。
+第一部・第二部・第3稿のWeb試読版。背景・立ち絵・音声・分岐を付けず、ページ送りで文章のテンポを確認します。
 
 公開先: https://games.syncworld.net/the-voynich-xcrossings/
 
@@ -23,5 +23,5 @@ python3 build.py
 node --test tests/reader.test.cjs
 ```
 
-既存の第2稿から作品名とタイトルカードを変更しています。本文の内容は変更していません。
+現在は第一部・第二部の第3稿を公開しています。
 GUIブラウザーでの表示確認は未実施です。

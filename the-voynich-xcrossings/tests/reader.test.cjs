@@ -7,10 +7,10 @@ const root = path.resolve(__dirname,'..');
 const source = fs.readFileSync(path.join(root,'manuscript.md'),'utf8');
 const book = core.parseMarkdown(source);
 
-test('second draft contains all six parts and 43 chapters',()=>{
-  assert.equal(book.parts.length,6);assert.equal(book.chapters.length,43);
+test('third draft contains the first two parts and 14 chapters',()=>{
+  assert.equal(book.parts.length,2);assert.equal(book.chapters.length,14);
   assert.equal(book.blocks[0].text,'「戻らないで！」');
-  assert.match(book.blocks.at(-1).text,/The Voynich XCrossings　完/);
+  assert.match(book.blocks.at(-1).text,/第二部・了/);
   assert.ok(book.chapters.every(c=>Number.isInteger(c.startId)));
 });
 test('every prose line is preserved, in order, with no duplicates',()=>{
