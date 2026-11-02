@@ -6,11 +6,11 @@ const core = require('../src/reader-core.js');
 const root = path.resolve(__dirname,'..');
 const source = fs.readFileSync(path.join(root,'manuscript.md'),'utf8');
 const book = core.parseMarkdown(source);
-test('fourth draft publishes exactly four common parts and 28 chapters',()=>{
+test('fifth draft publishes exactly four common parts and 28 chapters',()=>{
   assert.equal(book.parts.length,4);assert.equal(book.chapters.length,28);
   assert.equal(book.blocks[0].text,'「戻らないで！」');
   assert.equal(book.parts.at(-1).title,'第四部　助けた理由');
-  assert.equal(book.blocks.at(-1).text,'共通部・第4稿　試読ここまで');
+  assert.equal(book.blocks.at(-1).text,'共通部・第5稿　試読ここまで');
   assert.equal(book.blocks.at(-1).kind,'end');
   assert.ok(book.chapters.every(c=>Number.isInteger(c.startId)));
 });
@@ -56,13 +56,13 @@ test('standalone HTML includes exact authoritative manuscript and no external de
   for(const script of html.matchAll(/<script>([\s\S]*?)<\/script>/g))new (require('node:vm').Script)(script[1]);
 });
 
-test('fourth draft preserves common progress and offers three independent routes',()=>{
+test('fifth draft preserves common progress and offers three independent routes',()=>{
   const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
   const story=JSON.parse(html.match(/<script id="story-data" type="application\/json">([\s\S]*?)<\/script>/)[1]);
   assert.equal(story.progressVersion,'c1ba2af7557bef9d');
-  assert.equal(story.progressRevision,'draft4-v1');
-  assert.equal(story.edition,'共通部第一〜四部・第4稿');
-  assert.deepEqual(story.routes.map(r=>r.url),['./rana/?draft=4','./misha/?draft=4','./mio/?draft=4']);
+  assert.equal(story.progressRevision,'draft5-v1');
+  assert.equal(story.edition,'共通部第一〜四部・第5稿');
+  assert.deepEqual(story.routes.map(r=>r.url),['./rana/?draft=5','./misha/?draft=5','./mio/?draft=5']);
   assert.match(html,/story\.progressVersion\|\|story\.version/);
 });
 
@@ -95,7 +95,7 @@ test('both third-draft revisions migrate monotonically within the same common ch
   assert.equal(core.migrateAnchor(100,'unknown',migration.revision,migration.anchorMigrations,book.blocks.length),null);
 });
 
-test('all fourth-draft routes publish complete independent manuscripts with isolated progress',()=>{
+test('all fifth-draft routes publish complete independent manuscripts with isolated progress',()=>{
   const keys=new Set(['c1ba2af7557bef9d']);
   for(const [slug,tableCount,chapters] of [['rana',0,12],['misha',6,12],['mio',2,14],['ritsu',0,5]]){
     const manuscript=fs.readFileSync(path.join(root,slug,'manuscript.md'),'utf8');
@@ -106,9 +106,9 @@ test('all fourth-draft routes publish complete independent manuscripts with isol
     assert.equal(route.blocks.map(b=>b.text).join('\n'),expected);
     const html=fs.readFileSync(path.join(root,slug,'index.html'),'utf8');
     const data=JSON.parse(html.match(/<script id="story-data" type="application\/json">([\s\S]*?)<\/script>/)[1]);
-    assert.equal(data.markdown,manuscript);assert.match(data.edition,/第4稿/);
+    assert.equal(data.markdown,manuscript);assert.match(data.edition,/第5稿/);
     assert.ok(!keys.has(data.progressVersion));keys.add(data.progressVersion);
-    assert.ok(data.routes.some(r=>r.url==='../?draft=4'));
+    assert.ok(data.routes.some(r=>r.url==='../?draft=5'));
     for(const size of [240,360,480]){
       const pages=core.paginate(route.blocks,size);
       assert.deepEqual(pages.flatMap(p=>p.blocks.map(b=>b.id)),route.blocks.map(b=>b.id));
@@ -136,5 +136,28 @@ test('route navigation is available before reading to the end on every page',()=
    const target=path.resolve(root,slug,route.url.split('?')[0],'index.html');
    assert.ok(fs.existsSync(target),route.url);
   }
+ }
+});
+
+test('draft-four bookmarks migrate within their chapter in common and every route',()=>{
+ for(const slug of ['', 'rana','misha','mio','ritsu']){
+  const manuscript=core.parseMarkdown(fs.readFileSync(path.join(root,slug,'manuscript.md'),'utf8'));
+  const migration=JSON.parse(fs.readFileSync(path.join(root,slug,'reading-migrations.json'),'utf8'));
+  const revision=slug?slug+'-draft4-v1':'draft4-v1';
+  const map=migration.anchorMigrations[revision];
+  const starts=migration.sourceChapterStarts[revision];
+  assert.ok(map.length>0);
+  assert.ok(map.every((dest,i)=>Number.isInteger(dest)&&dest>=0&&dest<manuscript.blocks.length&&(i===0||dest>=map[i-1])));
+  starts.forEach((start,ch)=>{
+   assert.equal(map[start],manuscript.chapters[ch].startId);
+   for(let anchor=start;anchor<(starts[ch+1]??map.length);anchor++){
+    const dest=core.migrateAnchor(anchor,revision,migration.revision,migration.anchorMigrations,manuscript.blocks.length);
+    assert.equal(manuscript.blocks[dest].chapter,ch);
+   }
+  });
+  const html=fs.readFileSync(path.join(root,slug,'index.html'),'utf8');
+  const data=JSON.parse(html.match(/<script id="story-data" type="application\/json">([\s\S]*?)<\/script>/)[1]);
+  assert.equal(data.progressRevision,migration.revision);
+  assert.deepEqual(data.anchorMigrations,migration.anchorMigrations);
  }
 });
