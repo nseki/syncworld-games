@@ -161,3 +161,59 @@ test('draft-four bookmarks migrate within their chapter in common and every rout
   assert.deepEqual(data.anchorMigrations,migration.anchorMigrations);
  }
 });
+
+test('public character guide contains ten introductory profiles and no late revelations',()=>{
+ const cast=JSON.parse(fs.readFileSync(path.join(root,'characters.json'),'utf8'));
+ const people=cast.groups.flatMap(g=>g.people);
+ assert.equal(people.length,10);
+ assert.equal(new Set(people.map(p=>p.id)).size,10);
+ assert.match(JSON.stringify(cast),/ミハイロ/);
+ assert.doesNotMatch(JSON.stringify(cast),/コーエン|サーラ|シャンポリオン|前世|転生|襲撃|トゥルー|地下文明/);
+ const dedicated=fs.readFileSync(path.join(root,'characters/index.html'),'utf8');
+ assert.doesNotMatch(dedicated,/story-data|コーエン|サーラ|シャンポリオン|前世|転生|襲撃|地下文明/);
+ for(const slug of ['', 'rana','misha','mio','ritsu']){
+  const html=fs.readFileSync(path.join(root,slug,'index.html'),'utf8');
+  assert.match(html,/id="characters-open"[^>]*>人物一覧</);
+  const dialog=html.match(/<dialog id="characters"[\s\S]*?<\/dialog>/)[0];
+  assert.doesNotMatch(dialog,/コーエン|サーラ|シャンポリオン|前世|転生|襲撃|地下文明/);
+  for(const person of people)assert.ok(dialog.includes('id="character-'+person.id+'"'));
+  const href=dialog.match(/href="([^"]+)"/)[1];
+  assert.ok(fs.existsSync(path.resolve(root,slug,href,'index.html')));
+ }
+});
+
+test('opening and closing character guide retains the reading position and stored progress',()=>{
+ const vm=require('node:vm');
+ for(const slug of ['', 'rana','misha','mio','ritsu']){
+  const html=fs.readFileSync(path.join(root,slug,'index.html'),'utf8');
+  const story=JSON.parse(html.match(/<script id="story-data" type="application\/json">([\s\S]*?)<\/script>/)[1]);
+  class Element{
+   constructor(){this.listeners={};this.children=[];this.classList={toggle(){}};this.dataset={};this.style={};this.open=false;}
+   addEventListener(kind,fn){(this.listeners[kind]??=[]).push(fn);}
+   appendChild(x){this.children.push(x);return x;}
+   append(...xs){this.children.push(...xs);}
+   replaceChildren(...xs){this.children=xs;}
+   setAttribute(){} focus(){} closest(){return null;}
+   showModal(){this.open=true;}
+   close(){this.open=false;for(const fn of this.listeners.close||[])fn();}
+   click(){for(const fn of this.listeners.click||[])fn({target:this});}
+  }
+  const elements=new Map();const el=id=>{if(!elements.has(id))elements.set(id,new Element());return elements.get(id);};
+  el('story-data').textContent=JSON.stringify(story);
+  const dialogNames=['characters','contents','routes','settings'];
+  const closes=dialogNames.map(id=>{const x=new Element();x.dataset.close=id;return x;});
+  const saved={anchor:100,maxVisited:150,revision:story.progressRevision};
+  const key='yakusoku-reader-'+story.progressVersion;
+  const storage=new Map([[key,JSON.stringify(saved)]]);
+  const location={hash:''};
+  const document={getElementById:el,createElement:()=>new Element(),createDocumentFragment:()=>new Element(),documentElement:{dataset:{},style:{setProperty(){}}},querySelectorAll:selector=>selector==='[data-close]'?closes:selector==='dialog'?dialogNames.map(el):[],querySelector:()=>dialogNames.some(id=>el(id).open)?el('characters'):null,addEventListener(){}};
+  const window={matchMedia:()=>({matches:false}),scrollTo(){},addEventListener(){},getSelection:()=>null};
+  const context={document,window,location,history:{replaceState(_a,_b,hash){location.hash=hash;}},localStorage:{getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v)},ReaderCore:core,URLSearchParams,console,setTimeout:()=>0,clearTimeout(){}};
+  vm.runInNewContext(fs.readFileSync(path.join(root,'src/app.js'),'utf8'),context);
+  const before=storage.get(key),hash=location.hash;
+  el('characters-open').click();assert.equal(el('characters').open,true);
+  assert.equal(storage.get(key),before);assert.equal(location.hash,hash);
+  closes[0].click();assert.equal(el('characters').open,false);
+  assert.equal(storage.get(key),before);assert.equal(location.hash,hash);
+ }
+});

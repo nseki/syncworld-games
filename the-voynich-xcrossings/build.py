@@ -1,6 +1,17 @@
 from pathlib import Path
 import json, hashlib, html as html_tools
 ROOT = Path(__file__).resolve().parent
+characters = json.loads((ROOT / 'characters.json').read_text(encoding='utf-8'))
+def characters_html(heading='h3'):
+ esc = html_tools.escape
+ content = '<p class="dialog-note">'+esc(characters['note'])+'</p>'
+ for group in characters['groups']:
+  content += '<section class="character-group"><'+heading+'>'+esc(group['title'])+'</'+heading+'><dl class="character-list">'
+  for person in group['people']:
+   reading = '<span class="character-reading">'+esc(person['reading'])+'</span>' if person['reading'] else ''
+   content += '<div class="character-card" id="character-'+esc(person['id'])+'"><dt>'+esc(person['name'])+reading+'</dt><dd class="character-role">'+esc(person['role'])+'</dd><dd>'+esc(person['description'])+'</dd></div>'
+  content += '</dl></section>'
+ return content
 source = (ROOT / 'manuscript.md').read_text(encoding='utf-8')
 story = {'title':'The Voynich XCrossings', 'edition':'共通部第一〜四部・第5稿', 'version':hashlib.sha256(source.encode()).hexdigest()[:16], 'markdown':source, 'progressVersion':'c1ba2af7557bef9d'}
 migrations = json.loads((ROOT / 'reading-migrations.json').read_text())
@@ -11,6 +22,7 @@ def build(story, destination):
 
  html = (ROOT / 'src/template.html').read_text().replace('/*__EDITION__*/', html_tools.escape(story['edition']))
  for marker, value in {
+  '/*__CHARACTERS__*/':characters_html()+'<p class="dialog-note"><a href="'+base+'characters/">人物一覧を別ページで開く</a></p>',
   '/*__CSS__*/':(ROOT/'src/reader.css').read_text(),
   '/*__STORY__*/':json.dumps(story,ensure_ascii=False).replace('<',chr(92)+'u003c'),
   '/*__CORE__*/':(ROOT/'src/reader-core.js').read_text(),
@@ -40,3 +52,10 @@ for slug, name in [('rana','ラーナ'),('misha','ミーシャ'),('mio','澪'),(
  if slug == 'ritsu':
   route['edition']='律エピローグ・第5稿（澪エンド後）'
  build(route, ROOT/slug/'index.html')
+
+# 公開用の紹介だけで作る独立ページ。本文・作者用資料は埋め込まない。
+character_dir = ROOT/'characters'
+character_dir.mkdir(exist_ok=True)
+character_page = '<!doctype html>\n<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>人物一覧 | The Voynich XCrossings</title><style>'+(ROOT/'src/reader.css').read_text()+'</style></head><body><header class="masthead"><div class="brand">The Voynich XCrossings</div><a class="character-back" href="../?draft=5">試読ページへ</a></header><main class="character-page"><h1>人物一覧</h1>'+characters_html('h2')+'<footer class="character-footer">試読画面の上部にも「人物一覧」があります。そちらでは、読んでいるページを離れずに確認できます。</footer></main></body></html>\n'
+(character_dir/'index.html').write_text(character_page,encoding='utf-8')
+print(json.dumps({'output':'characters/index.html','people':sum(len(g['people']) for g in characters['groups'])},ensure_ascii=False))
