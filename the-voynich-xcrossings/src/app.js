@@ -74,6 +74,11 @@
     });showDialog('contents');
   }
   $('previous').addEventListener('click',()=>move(-1));$('next').addEventListener('click',()=>move(1));
+  $('routes-open').addEventListener('click',()=>{
+    const body=$('routes-body');body.replaceChildren();
+    (story.navigation||[]).forEach(route=>{const link=document.createElement('a');link.className='toc-link route-choice';link.href=route.url;link.textContent=route.label;body.appendChild(link);});
+    showDialog('routes');
+  });
   $('contents-open').addEventListener('click',showContents);$('settings-open').addEventListener('click',()=>showDialog('settings'));
   document.querySelectorAll('[data-close]').forEach(button=>button.addEventListener('click',()=>$(button.dataset.close).close()));
   document.querySelectorAll('dialog').forEach(dialog=>{dialog.addEventListener('close',()=>$('reading-page').focus({preventScroll:true}));dialog.addEventListener('click',event=>{if(event.target!==dialog)return;const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)dialog.close();});});

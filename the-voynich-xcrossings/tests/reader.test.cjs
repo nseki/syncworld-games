@@ -56,13 +56,13 @@ test('standalone HTML includes exact authoritative manuscript and no external de
   for(const script of html.matchAll(/<script>([\s\S]*?)<\/script>/g))new (require('node:vm').Script)(script[1]);
 });
 
-test('fourth draft preserves common progress and offers two independent routes',()=>{
+test('fourth draft preserves common progress and offers three independent routes',()=>{
   const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
   const story=JSON.parse(html.match(/<script id="story-data" type="application\/json">([\s\S]*?)<\/script>/)[1]);
   assert.equal(story.progressVersion,'c1ba2af7557bef9d');
   assert.equal(story.progressRevision,'draft4-v1');
   assert.equal(story.edition,'共通部第一〜四部・第4稿');
-  assert.deepEqual(story.routes.map(r=>r.url),['./rana/?draft=4','./misha/?draft=4']);
+  assert.deepEqual(story.routes.map(r=>r.url),['./rana/?draft=4','./misha/?draft=4','./mio/?draft=4']);
   assert.match(html,/story\.progressVersion\|\|story\.version/);
 });
 
@@ -95,12 +95,12 @@ test('both third-draft revisions migrate monotonically within the same common ch
   assert.equal(core.migrateAnchor(100,'unknown',migration.revision,migration.anchorMigrations,book.blocks.length),null);
 });
 
-test('both fourth-draft routes publish complete independent manuscripts with isolated progress',()=>{
+test('all fourth-draft routes publish complete independent manuscripts with isolated progress',()=>{
   const keys=new Set(['c1ba2af7557bef9d']);
-  for(const [slug,tableCount] of [['rana',0],['misha',6]]){
+  for(const [slug,tableCount,chapters] of [['rana',0,12],['misha',6,12],['mio',2,14],['ritsu',0,5]]){
     const manuscript=fs.readFileSync(path.join(root,slug,'manuscript.md'),'utf8');
     const route=core.parseMarkdown(manuscript);
-    assert.equal(route.parts.length,1);assert.equal(route.chapters.length,12);
+    assert.equal(route.parts.length,1);assert.equal(route.chapters.length,chapters);
     assert.equal(route.blocks.filter(b=>b.kind==='table').length,tableCount);
     const expected=manuscript.split(/\r?\n/).map(l=>l.trim()).filter(l=>l&&!/^#{1,3} /.test(l)&&l!=='＊'&&!/^---+$/.test(l)).map(l=>/^\*.*\*$/.test(l)?l.slice(1,-1):l).join('\n');
     assert.equal(route.blocks.map(b=>b.text).join('\n'),expected);
@@ -124,4 +124,17 @@ test('editorial comments are hidden and do not become table cells or prose',()=>
   assert.deepEqual(x.blocks.map(b=>b.kind),['text','table','text']);
   assert.equal(x.blocks[0].text,'Before');assert.equal(x.blocks[2].text,'After');
   assert.doesNotMatch(x.blocks.map(b=>b.text).join(''),/private|editorial/);
+});
+
+test('route navigation is available before reading to the end on every page',()=>{
+ for(const slug of ['', 'rana','misha','mio','ritsu']){
+  const html=fs.readFileSync(path.join(root,slug,'index.html'),'utf8');
+  const story=JSON.parse(html.match(/<script id="story-data" type="application\/json">([\s\S]*?)<\/script>/)[1]);
+  assert.match(html,/id="routes-open"/);assert.match(html,/id="routes-body"/);
+  assert.equal(story.navigation.length,5);
+  for(const route of story.navigation){
+   const target=path.resolve(root,slug,route.url.split('?')[0],'index.html');
+   assert.ok(fs.existsSync(target),route.url);
+  }
+ }
 });

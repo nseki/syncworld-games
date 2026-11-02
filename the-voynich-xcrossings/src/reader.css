@@ -5,3 +5,5 @@
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
 
 .table-scroll{max-width:100%;overflow-x:auto;overscroll-behavior-x:contain;cursor:default;padding:4px 0 14px}.table-scroll table{border-collapse:collapse;width:100%;min-width:560px;font-family:system-ui,sans-serif;font-size:clamp(14px,.74em,17px);line-height:1.7;letter-spacing:0}.table-scroll th,.table-scroll td{padding:13px 14px;border:1px solid var(--line);vertical-align:top;text-align:left;min-width:110px}.table-scroll th{background:var(--accent-soft);font-weight:600}.table-scroll:focus-visible{outline:2px solid var(--accent);outline-offset:3px}.route-links{max-width:800px;margin:0 auto 45px;padding:0 28px;text-align:center}.route-links p{font-size:13px;color:var(--muted);line-height:1.8}.route-links a{display:inline-block;padding:13px 22px;border:1px solid var(--accent);border-radius:6px;text-decoration:none}
+
+.tools{flex-wrap:wrap}.route-choice{display:block;text-decoration:none;color:inherit;padding:12px;margin-top:8px;border:1px solid currentColor;border-radius:6px}.route-choice:focus-visible{outline:3px solid #809b53;outline-offset:3px}
