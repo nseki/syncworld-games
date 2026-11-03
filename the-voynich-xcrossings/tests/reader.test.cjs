@@ -46,12 +46,13 @@ test('invalid URL or stored anchors cannot select a nonexistent page',()=>{
   assert.equal(core.validAnchor('0',book.blocks.length),0);
   assert.equal(core.validAnchor('15',book.blocks.length),15);
 });
-test('standalone HTML includes exact authoritative manuscript and no external dependencies',()=>{
+test('standalone HTML includes exact authoritative manuscript and only the GA4 external script',()=>{
   const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
   const json=html.match(/<script id="story-data" type="application\/json">([\s\S]*?)<\/script>/)[1];
   assert.equal(JSON.parse(json).markdown,source);
-  assert.equal((html.match(/<script(?:\s|>)/g)||[]).length,3);
-  assert.doesNotMatch(html,/<(?:script|link)[^>]*(?:src|href)=["']https?:/);
+  assert.equal((html.match(/<script(?:\s|>)/g)||[]).length,5);
+  const external = [...html.matchAll(/<(?:script|link)[^>]*(?:src|href)=["'](https?:[^"']+)["']/g)].map(match=>match[1]);
+  assert.deepEqual(external,['https://www.googletagmanager.com/gtag/js?id=G-7GGTTZLCQE']);
   assert.doesNotMatch(html,/\/\*__(?:CSS|STORY|CORE|APP)__\*\//);
   for(const script of html.matchAll(/<script>([\s\S]*?)<\/script>/g))new (require('node:vm').Script)(script[1]);
 });
