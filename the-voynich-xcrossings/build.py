@@ -23,7 +23,7 @@ def build(story, destination):
  story['progressVersions'] = progress_versions
  base = './' if destination.parent == ROOT else '../'
  story['assetBase'] = base + 'assets/'
- story['navigation'] = [{'url':base+target+'?draft=6','label':label} for target,label in [('', '共通部 第一〜四部'),('rana/','ラーナルート'),('misha/','ミーシャルート'),('mio/','澪ルート（トゥルー）'),('ritsu/','律の後日譚')]]
+ story['navigation'] = [{'url':base+target+'?draft=6','label':label} for target,label in [('rana/','第五部　ラーナルート'),('misha/','第六部　ミーシャルート'),('mio/','第七部　澪ルート'),('ritsu/','第八部　律の後日譚')]]
 
  html = (ROOT / 'src/template.html').read_text().replace('/*__EDITION__*/', html_tools.escape(story['edition'])).replace('/*__HOME__*/', base+'../').replace('/*__ASSET_BASE__*/', story['assetBase'])
  for marker, value in {
