@@ -52,7 +52,7 @@ test('standalone HTML includes exact authoritative manuscript and only the GA4 e
   assert.equal(JSON.parse(json).markdown,source);
   assert.equal((html.match(/<script(?:\s|>)/g)||[]).length,5);
   const external = [...html.matchAll(/<(?:script|link)[^>]*(?:src|href)=["'](https?:[^"']+)["']/g)].map(match=>match[1]);
-  assert.deepEqual(external,['https://www.googletagmanager.com/gtag/js?id=G-7GGTTZLCQE']);
+  assert.deepEqual(external,['https://www.googletagmanager.com/gtag/js?id=G-M7PJD05WLR']);
   assert.doesNotMatch(html,/\/\*__(?:CSS|STORY|CORE|APP)__\*\//);
   for(const script of html.matchAll(/<script>([\s\S]*?)<\/script>/g))new (require('node:vm').Script)(script[1]);
 });
