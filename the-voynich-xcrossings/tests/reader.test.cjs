@@ -130,7 +130,7 @@ test('route navigation is available before reading to the end on every page',()=
  for(const slug of ['', 'rana','misha','mio','ritsu']){
   const html=fs.readFileSync(path.join(root,slug,'index.html'),'utf8');
   const story=JSON.parse(html.match(/<script id="story-data" type="application\/json">([\s\S]*?)<\/script>/)[1]);
-  assert.match(html,/id="routes-open"/);assert.match(html,/id="routes-body"/);
+  assert.doesNotMatch(html,/id="routes-open"/);assert.match(html,/id="toc-body"/);
   assert.equal(story.navigation.length,5);
   for(const route of story.navigation){
    const target=path.resolve(root,slug,route.url.split('?')[0],'index.html');

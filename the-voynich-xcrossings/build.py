@@ -16,7 +16,11 @@ source = (ROOT / 'manuscript.md').read_text(encoding='utf-8')
 story = {'title':'The Voynich XCrossings', 'edition':'共通部第一〜四部・第6稿', 'version':hashlib.sha256(source.encode()).hexdigest()[:16], 'markdown':source, 'progressVersion':'c1ba2af7557bef9d'}
 migrations = json.loads((ROOT / 'reading-migrations.json').read_text())
 story.update(progressRevision=migrations['revision'], anchorMigrations=migrations['anchorMigrations'])
+route_names = [('rana','ラーナ'),('misha','ミーシャ'),('mio','澪'),('ritsu','律')]
+route_versions = {slug: slug+'-draft4-reader-v1' for slug, _ in route_names}
+progress_versions = [story['progressVersion'], *route_versions.values()]
 def build(story, destination):
+ story['progressVersions'] = progress_versions
  base = './' if destination.parent == ROOT else '../'
  story['assetBase'] = base + 'assets/'
  story['navigation'] = [{'url':base+target+'?draft=6','label':label} for target,label in [('', '共通部 第一〜四部'),('rana/','ラーナルート'),('misha/','ミーシャルート'),('mio/','澪ルート（トゥルー）'),('ritsu/','律の後日譚')]]
@@ -39,11 +43,11 @@ story['routes'] = [
  {'url':'./misha/?draft=6', 'label':'ミーシャルートを読む', 'description':'共通第四部から、研究記録の調査を進める別の展開です。'},
  {'url':'./mio/?draft=6','label':'澪ルートを読む','description':'共通第四部から分岐するトゥルールートです。先にラーナ・ミーシャの順で読むことをおすすめします。'}]
 build(story, ROOT/'index.html')
-for slug, name in [('rana','ラーナ'),('misha','ミーシャ'),('mio','澪'),('ritsu','律')]:
+for slug, name in route_names:
  text = (ROOT/slug/'manuscript.md').read_text()
  route = {'title':story['title'], 'edition':name+'ルート・第6稿（共通第四部から分岐）',
   'markdown':text, 'version':hashlib.sha256(text.encode()).hexdigest()[:16],
-  'progressVersion':slug+'-draft4-reader-v1', 'progressRevision':json.loads((ROOT/slug/'reading-migrations.json').read_text())['revision'], 'anchorMigrations':json.loads((ROOT/slug/'reading-migrations.json').read_text())['anchorMigrations'],
+  'progressVersion':route_versions[slug], 'progressRevision':json.loads((ROOT/slug/'reading-migrations.json').read_text())['revision'], 'anchorMigrations':json.loads((ROOT/slug/'reading-migrations.json').read_text())['anchorMigrations'],
   'routes':[{'url':'../?draft=6','label':'共通部へ戻る','description':'共通第四部から分岐する独立したルートです。'}]}
  if slug == 'rana':
   route['routes'].insert(0, {'url':'../misha/?draft=6','label':'ミーシャルートを読む','description':'共通第四部から別の調査を選んだ展開です。ラーナルートの続編ではありません。'})

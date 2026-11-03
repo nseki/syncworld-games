@@ -94,13 +94,39 @@
         const label=document.createElement('span');label.textContent=chapter.startId<=maxVisited?chapter.title:'第'+chapter.label+'章';
         button.append(mark,label);button.addEventListener('click',()=>{pageIndex=pageForAnchor(pages,chapter.startId);$('contents').close();render();});section.appendChild(button);
       });body.appendChild(section);
-    });showDialog('contents');
+    });
+    const routes=document.createElement('section');
+    routes.className='toc-group';
+    const heading=document.createElement('h3');
+    heading.textContent='ルート';
+    const navigation=document.createElement('nav');
+    navigation.setAttribute('aria-label','試読ルート一覧');
+    story.navigation.forEach(route=>{
+      const link=document.createElement('a');
+      link.className='toc-link route-choice';
+      link.href=route.url;
+      link.textContent=route.label;
+      navigation.appendChild(link);
+    });
+    routes.append(heading,navigation);
+    body.appendChild(routes);
+    showDialog('contents');
   }
   $('previous').addEventListener('click',()=>move(-1));$('next').addEventListener('click',()=>move(1));
-  $('routes-open').addEventListener('click',()=>{
-    const body=$('routes-body');body.replaceChildren();
-    (story.navigation||[]).forEach(route=>{const link=document.createElement('a');link.className='toc-link route-choice';link.href=route.url;link.textContent=route.label;body.appendChild(link);});
-    showDialog('routes');
+  $('reset-progress').addEventListener('click',()=>{
+    if(!window.confirm('共通部と全ルートの読書位置・既読記録をリセットしますか？'))return;
+    try{
+      for(const version of story.progressVersions)localStorage.removeItem('yakusoku-reader-'+version);
+    }catch(_){
+      $('settings').close();
+      toast('読書記録をリセットできませんでした。');
+      return;
+    }
+    pageIndex=0;
+    maxVisited=0;
+    $('settings').close();
+    render();
+    toast('読書記録をリセットしました。');
   });
   $('characters-open').addEventListener('click',()=>showDialog('characters'));
   $('contents-open').addEventListener('click',showContents);$('settings-open').addEventListener('click',()=>showDialog('settings'));
