@@ -14,3 +14,6 @@
 .story-figure{margin:1.5rem auto;text-align:center}
 .story-figure img{display:block;margin:auto;max-width:100%;height:auto}
 .story-figure.f38r img{width:400px}
+
+.figure-credit-link{text-align:center;font-size:.8rem;padding:1rem}
+.figure-credit-link a{color:inherit}

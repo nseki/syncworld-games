@@ -36,8 +36,16 @@
       if(block.kind==='figure'){
         const figure=document.createElement('figure');figure.className='story-figure '+block.text;
         const img=document.createElement('img');
-        img.src=story.assetBase+block.text+(block.text==='f38r'?'.jpg':'.svg');
-        img.alt=block.text==='f38r'?'ヴォイニッチ手稿38葉表。植物図の上に未知の文字が並ぶ。':'赤地に白い八尖の十字。箱庭の移転申請書の印。';
+        const figures={
+          'garden-cross':'赤地に白い八尖の十字。箱庭の移転申請書の印。',
+          f38r:'葉と根を描いた手稿の植物図。葉の下に未知の文字が並ぶ。',
+          'cross-comparison':'左は移転申請書の均整の取れた十字。右は古い帳面の十字で、先端の切れ込みが浅く不ぞろい。',
+          'maps-overlaid':'旧貯留区画の輪郭に、現在の家々、水路、井戸と作業場が重なる。',
+          'boat-sketch':'舟の縁から長い線が伸び、短い線の脇に小さな窪みがある。',
+          'waiting-lines':'ミーシャと澪の二本の線は、現在から先が破線。次の時期は未確定。'
+        };
+        img.src=story.assetBase+(block.text==='f38r'?'f38r-illustration':block.text)+'.svg';
+        img.alt=figures[block.text];
         figure.appendChild(img);fragment.appendChild(figure);
       }else if(block.kind==='table'){
         const wrap=document.createElement('div');wrap.className='table-scroll';wrap.tabIndex=0;wrap.setAttribute('role','region');wrap.setAttribute('aria-label','比較表。横にスクロールできます');

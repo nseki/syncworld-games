@@ -31,6 +31,7 @@ def build(story, destination):
  }.items():
   assert html.count(marker)==1, marker
   html = html.replace(marker,value)
+ html = html.replace('</body>', '<footer class="figure-credit-link"><a href="'+base+'credits/">図版について</a></footer></body>')
  destination.write_text(html,encoding='utf-8')
  print(json.dumps({'output':str(destination.relative_to(ROOT)),'version':story['version'],'manuscript_characters':len(story['markdown']),'bytes':len(html.encode())},ensure_ascii=False))
 story['routes'] = [
@@ -42,7 +43,7 @@ for slug, name in [('rana','ラーナ'),('misha','ミーシャ'),('mio','澪'),(
  text = (ROOT/slug/'manuscript.md').read_text()
  route = {'title':story['title'], 'edition':name+'ルート・第6稿（共通第四部から分岐）',
   'markdown':text, 'version':hashlib.sha256(text.encode()).hexdigest()[:16],
-  'progressVersion':slug+'-draft4-reader-v1', 'progressRevision':slug+'-draft6-v1', 'anchorMigrations':json.loads((ROOT/slug/'reading-migrations.json').read_text())['anchorMigrations'],
+  'progressVersion':slug+'-draft4-reader-v1', 'progressRevision':json.loads((ROOT/slug/'reading-migrations.json').read_text())['revision'], 'anchorMigrations':json.loads((ROOT/slug/'reading-migrations.json').read_text())['anchorMigrations'],
   'routes':[{'url':'../?draft=6','label':'共通部へ戻る','description':'共通第四部から分岐する独立したルートです。'}]}
  if slug == 'rana':
   route['routes'].insert(0, {'url':'../misha/?draft=6','label':'ミーシャルートを読む','description':'共通第四部から別の調査を選んだ展開です。ラーナルートの続編ではありません。'})
