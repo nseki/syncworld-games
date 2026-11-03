@@ -26,6 +26,21 @@ def build(story, destination):
  story['navigation'] = [{'url':base+target+'?draft=6','label':label} for target,label in [('rana/','第五部　ラーナルート'),('misha/','第六部　ミーシャルート'),('mio/','第七部　澪ルート'),('ritsu/','第八部　律の後日譚')]]
 
  html = (ROOT / 'src/template.html').read_text().replace('/*__EDITION__*/', html_tools.escape(story['edition'])).replace('/*__HOME__*/', base+'../').replace('/*__ASSET_BASE__*/', story['assetBase'])
+ if destination.parent == ROOT:
+  url = 'https://games.syncworld.net/the-voynich-xcrossings/'
+  metadata = {
+   'og:type': 'website',
+   'og:url': url,
+   'og:title': story['title'],
+   'og:description': 'ヴォイニッチ手稿をめぐるSFミステリー。',
+   'og:image': url+'assets/og-title.png',
+   'og:image:type': 'image/png',
+   'og:image:width': '1200',
+   'og:image:height': '630',
+   'og:image:alt': 'The Voynich XCrossingsのタイトルと植物のイラスト',
+  }
+  tags = ''.join(f'<meta property="{key}" content="{html_tools.escape(value)}">\n' for key, value in metadata.items())
+  html = html.replace('</head>', tags+'<meta name="twitter:card" content="summary_large_image">\n</head>')
  for marker, value in {
   '/*__CHARACTERS__*/':characters_html()+'<p class="dialog-note"><a href="'+base+'characters/">人物一覧を別ページで開く</a></p>',
   '/*__CSS__*/':(ROOT/'src/reader.css').read_text(),
