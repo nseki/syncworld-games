@@ -21,7 +21,7 @@ def build(story, destination):
  story['assetBase'] = base + 'assets/'
  story['navigation'] = [{'url':base+target+'?draft=6','label':label} for target,label in [('', '共通部 第一〜四部'),('rana/','ラーナルート'),('misha/','ミーシャルート'),('mio/','澪ルート（トゥルー）'),('ritsu/','律の後日譚')]]
 
- html = (ROOT / 'src/template.html').read_text().replace('/*__EDITION__*/', html_tools.escape(story['edition']))
+ html = (ROOT / 'src/template.html').read_text().replace('/*__EDITION__*/', html_tools.escape(story['edition'])).replace('/*__HOME__*/', base+'../').replace('/*__ASSET_BASE__*/', story['assetBase'])
  for marker, value in {
   '/*__CHARACTERS__*/':characters_html()+'<p class="dialog-note"><a href="'+base+'characters/">人物一覧を別ページで開く</a></p>',
   '/*__CSS__*/':(ROOT/'src/reader.css').read_text(),

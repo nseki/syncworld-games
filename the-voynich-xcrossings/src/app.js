@@ -48,6 +48,14 @@
         img.src=story.assetBase+(block.text==='f38r'?'f38r-illustration':block.text)+'.svg';
         img.alt=figures[block.text];
         figure.appendChild(img);fragment.appendChild(figure);
+      }else if(block.kind==='title' && block.text===story.title){
+        const logo=document.createElement('img');
+        logo.className='cover-logo';
+        logo.src=story.assetBase+'logo-cover.svg';
+        logo.alt=block.text;
+        logo.width=800;
+        logo.height=250;
+        fragment.appendChild(logo);
       }else if(block.kind==='table'){
         const wrap=document.createElement('div');wrap.className='table-scroll';wrap.tabIndex=0;wrap.setAttribute('role','region');wrap.setAttribute('aria-label','比較表。横にスクロールできます');
         const table=document.createElement('table');

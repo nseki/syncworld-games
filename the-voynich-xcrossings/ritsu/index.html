@@ -24,10 +24,13 @@
 
 .figure-credit-link{text-align:center;font-size:.8rem;padding:1rem}
 .figure-credit-link a{color:inherit}
+
+.brand-home{display:inline-block;vertical-align:top}.brand-home img{display:block;width:220px;max-width:100%;height:auto}.cover-logo{display:block;width:min(100%,620px);height:auto}[data-theme=dark] :is(.brand-home img,.cover-logo){filter:brightness(1.85)}
+@media(max-width:600px){.brand-home img{width:170px}}
 </style>
 </head>
 <body>
-<header class="masthead"><div><div class="brand">The Voynich XCrossings</div><div class="edition">律エピローグ・第6稿（澪エンド後） ／ 試読版</div></div><nav class="tools" aria-label="読書メニュー"><button class="tool" id="routes-open" type="button">ルート</button><button class="tool" id="characters-open" type="button">人物一覧</button><button class="tool" id="contents-open" type="button">目次</button><button class="tool" id="settings-open" type="button">文字・表示</button></nav></header>
+<header class="masthead"><div><a class="brand brand-home" href="../../" aria-label="The Voynich XCrossings · サイトトップ"><img src="../assets/logo-header.svg" alt="The Voynich XCrossings" width="640" height="224"></a><div class="edition">律エピローグ・第6稿（澪エンド後） ／ 試読版</div></div><nav class="tools" aria-label="読書メニュー"><button class="tool" id="routes-open" type="button">ルート</button><button class="tool" id="characters-open" type="button">人物一覧</button><button class="tool" id="contents-open" type="button">目次</button><button class="tool" id="settings-open" type="button">文字・表示</button></nav></header>
 <div class="shell">
 <div class="chapter-head"><span id="part-label"></span><span class="position" id="chapter-position"></span></div>
 <main id="reading-page" class="sheet" tabindex="0" aria-label="本文。クリックで次のページ"><h1 class="chapter-title" id="chapter-title"></h1><div class="prose" id="prose"></div></main>
@@ -185,6 +188,14 @@
         img.src=story.assetBase+(block.text==='f38r'?'f38r-illustration':block.text)+'.svg';
         img.alt=figures[block.text];
         figure.appendChild(img);fragment.appendChild(figure);
+      }else if(block.kind==='title' && block.text===story.title){
+        const logo=document.createElement('img');
+        logo.className='cover-logo';
+        logo.src=story.assetBase+'logo-cover.svg';
+        logo.alt=block.text;
+        logo.width=800;
+        logo.height=250;
+        fragment.appendChild(logo);
       }else if(block.kind==='table'){
         const wrap=document.createElement('div');wrap.className='table-scroll';wrap.tabIndex=0;wrap.setAttribute('role','region');wrap.setAttribute('aria-label','比較表。横にスクロールできます');
         const table=document.createElement('table');

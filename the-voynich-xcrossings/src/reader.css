@@ -17,3 +17,6 @@
 
 .figure-credit-link{text-align:center;font-size:.8rem;padding:1rem}
 .figure-credit-link a{color:inherit}
+
+.brand-home{display:inline-block;vertical-align:top}.brand-home img{display:block;width:220px;max-width:100%;height:auto}.cover-logo{display:block;width:min(100%,620px);height:auto}[data-theme=dark] :is(.brand-home img,.cover-logo){filter:brightness(1.85)}
+@media(max-width:600px){.brand-home img{width:170px}}
