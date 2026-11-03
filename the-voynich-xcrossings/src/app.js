@@ -33,7 +33,13 @@
     $('chapter-position').textContent=chapter?'第'+(page.chapter+1)+'章 / 全'+manuscript.chapters.length+'章':'';
     const fragment=document.createDocumentFragment();
     page.blocks.forEach(block=>{
-      if(block.kind==='table'){
+      if(block.kind==='figure'){
+        const figure=document.createElement('figure');figure.className='story-figure '+block.text;
+        const img=document.createElement('img');
+        img.src=story.assetBase+block.text+(block.text==='f38r'?'.jpg':'.svg');
+        img.alt=block.text==='f38r'?'ヴォイニッチ手稿38葉表。植物図の上に未知の文字が並ぶ。':'赤地に白い八尖の十字。箱庭の移転申請書の印。';
+        figure.appendChild(img);fragment.appendChild(figure);
+      }else if(block.kind==='table'){
         const wrap=document.createElement('div');wrap.className='table-scroll';wrap.tabIndex=0;wrap.setAttribute('role','region');wrap.setAttribute('aria-label','比較表。横にスクロールできます');
         const table=document.createElement('table');
         const rows=block.text.split('\n').map(row=>row.slice(1,-1).split('|').map(cell=>cell.trim()));

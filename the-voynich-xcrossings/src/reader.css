@@ -10,3 +10,7 @@
 
 .character-group{margin:0 0 28px}.character-group h3{font-size:13px;color:var(--muted);font-weight:500;letter-spacing:.06em;margin:0 0 10px}.character-list{margin:0}.character-card{padding:17px 0;border-top:1px solid var(--line)}.character-card dt{font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font-size:19px;font-weight:600;line-height:1.7}.character-reading{font-family:system-ui,sans-serif;font-size:12px;font-weight:400;color:var(--muted);margin-left:10px}.character-card dd{margin:7px 0 0;font-size:14px;line-height:1.9}.character-role{color:var(--accent);font-size:12px}.character-page{max-width:720px;margin:0 auto;padding:0 28px 60px}.character-page h1{font-size:26px;font-weight:500;letter-spacing:.1em;margin:28px 0 18px}.character-page .character-group{margin-top:28px}.character-page .character-group h2{font-size:16px;font-weight:500;color:var(--muted)}.character-footer{padding-top:20px;border-top:1px solid var(--line);font-size:13px;line-height:1.9}.character-back{font-size:13px;display:inline-block;padding:10px 0}.character-page .dialog-note{font-size:13px}.character-page .character-card dd{font-size:15px}
 @media(max-width:600px){.masthead{flex-wrap:wrap;align-items:flex-start}.masthead .tools{width:100%;justify-content:flex-start}.character-page{padding:0 20px 40px}.character-reading{display:block;margin:0}.character-card dt{font-size:18px}}
+
+.story-figure{margin:1.5rem auto;text-align:center}
+.story-figure img{display:block;margin:auto;max-width:100%;height:auto}
+.story-figure.f38r img{width:400px}

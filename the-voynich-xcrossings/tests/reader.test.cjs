@@ -6,17 +6,17 @@ const core = require('../src/reader-core.js');
 const root = path.resolve(__dirname,'..');
 const source = fs.readFileSync(path.join(root,'manuscript.md'),'utf8');
 const book = core.parseMarkdown(source);
-test('fifth draft publishes exactly four common parts and 28 chapters',()=>{
+test('sixth draft publishes exactly four common parts and 28 chapters',()=>{
   assert.equal(book.parts.length,4);assert.equal(book.chapters.length,28);
   assert.equal(book.blocks[0].text,'「戻らないで！」');
   assert.equal(book.parts.at(-1).title,'第四部　助けた理由');
-  assert.equal(book.blocks.at(-1).text,'共通部・第5稿　試読ここまで');
+  assert.equal(book.blocks.at(-1).text,'共通部・第6稿　試読ここまで');
   assert.equal(book.blocks.at(-1).kind,'end');
   assert.ok(book.chapters.every(c=>Number.isInteger(c.startId)));
 });
 test('every prose line is preserved, in order, with no duplicates',()=>{
-  const expected=source.split(/\r?\n/).map(l=>l.trim()).filter(l=>l&&!/^#{1,3} /.test(l)&&l!=='＊'&&!/^---+$/.test(l)&&!/^\*全六部/.test(l)&&l!=='*タイトル*').map(l=>/^\*.*\*$/.test(l)?l.slice(1,-1):l).join('\n');
-  const actual=book.blocks.filter(b=>b.kind!=='title').map(b=>b.text).join('\n');
+  const expected=source.split(/\r?\n/).map(l=>l.trim()).filter(l=>l&&!l.startsWith('<!-- figure:')&&!/^#{1,3} /.test(l)&&l!=='＊'&&!/^---+$/.test(l)&&!/^\*全六部/.test(l)&&l!=='*タイトル*').map(l=>/^\*.*\*$/.test(l)?l.slice(1,-1):l).join('\n');
+  const actual=book.blocks.filter(b=>b.kind!=='title'&&b.kind!=='figure').map(b=>b.text).join('\n');
   assert.equal(actual,expected);
 });
 test('page length options retain every block exactly once',()=>{
@@ -39,7 +39,7 @@ test('reading anchor stays visible after changing page size',()=>{
 test('scene breaks and title cards do not join unrelated scenes',()=>{
   const b=core.parseMarkdown('# Book\n\n## 第一部\n\n### 一 Scene\n\nA\n\n＊\n\nB\n\n# Book\n\n*タイトル*\n\n## 第二部\n\n### 一 Next\n\nC');
   const pages=core.paginate(b.blocks,480);
-  assert.deepEqual(pages.map(p=>p.blocks.map(b=>b.text).join('')),['A','B','Book','C']);
+  assert.deepEqual(pages.map(p=>p.blocks.filter(b=>b.kind!=='figure').map(b=>b.text).join('')),['A','B','Book','C']);
 });
 test('invalid URL or stored anchors cannot select a nonexistent page',()=>{
   for(const x of [null,'','NaN','-1','1.5','Infinity','<script>',String(book.blocks.length)])assert.equal(core.validAnchor(x,book.blocks.length),null);
@@ -56,13 +56,13 @@ test('standalone HTML includes exact authoritative manuscript and no external de
   for(const script of html.matchAll(/<script>([\s\S]*?)<\/script>/g))new (require('node:vm').Script)(script[1]);
 });
 
-test('fifth draft preserves common progress and offers three independent routes',()=>{
+test('sixth draft preserves common progress and offers three independent routes',()=>{
   const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
   const story=JSON.parse(html.match(/<script id="story-data" type="application\/json">([\s\S]*?)<\/script>/)[1]);
   assert.equal(story.progressVersion,'c1ba2af7557bef9d');
-  assert.equal(story.progressRevision,'draft5-v1');
-  assert.equal(story.edition,'共通部第一〜四部・第5稿');
-  assert.deepEqual(story.routes.map(r=>r.url),['./rana/?draft=5','./misha/?draft=5','./mio/?draft=5']);
+  assert.equal(story.progressRevision,'draft6-v1');
+  assert.equal(story.edition,'共通部第一〜四部・第6稿');
+  assert.deepEqual(story.routes.map(r=>r.url),['./rana/?draft=6','./misha/?draft=6','./mio/?draft=6']);
   assert.match(html,/story\.progressVersion\|\|story\.version/);
 });
 
@@ -95,20 +95,20 @@ test('both third-draft revisions migrate monotonically within the same common ch
   assert.equal(core.migrateAnchor(100,'unknown',migration.revision,migration.anchorMigrations,book.blocks.length),null);
 });
 
-test('all fifth-draft routes publish complete independent manuscripts with isolated progress',()=>{
+test('all sixth-draft routes publish complete independent manuscripts with isolated progress',()=>{
   const keys=new Set(['c1ba2af7557bef9d']);
   for(const [slug,tableCount,chapters] of [['rana',0,12],['misha',6,12],['mio',2,14],['ritsu',0,5]]){
     const manuscript=fs.readFileSync(path.join(root,slug,'manuscript.md'),'utf8');
     const route=core.parseMarkdown(manuscript);
     assert.equal(route.parts.length,1);assert.equal(route.chapters.length,chapters);
     assert.equal(route.blocks.filter(b=>b.kind==='table').length,tableCount);
-    const expected=manuscript.split(/\r?\n/).map(l=>l.trim()).filter(l=>l&&!/^#{1,3} /.test(l)&&l!=='＊'&&!/^---+$/.test(l)).map(l=>/^\*.*\*$/.test(l)?l.slice(1,-1):l).join('\n');
-    assert.equal(route.blocks.map(b=>b.text).join('\n'),expected);
+    const expected=manuscript.split(/\r?\n/).map(l=>l.trim()).filter(l=>l&&!l.startsWith('<!-- figure:')&&!/^#{1,3} /.test(l)&&l!=='＊'&&!/^---+$/.test(l)).map(l=>/^\*.*\*$/.test(l)?l.slice(1,-1):l).join('\n');
+    assert.equal(route.blocks.filter(b=>b.kind!=='figure').map(b=>b.text).join('\n'),expected);
     const html=fs.readFileSync(path.join(root,slug,'index.html'),'utf8');
     const data=JSON.parse(html.match(/<script id="story-data" type="application\/json">([\s\S]*?)<\/script>/)[1]);
-    assert.equal(data.markdown,manuscript);assert.match(data.edition,/第5稿/);
+    assert.equal(data.markdown,manuscript);assert.match(data.edition,/第6稿/);
     assert.ok(!keys.has(data.progressVersion));keys.add(data.progressVersion);
-    assert.ok(data.routes.some(r=>r.url==='../?draft=5'));
+    assert.ok(data.routes.some(r=>r.url==='../?draft=6'));
     for(const size of [240,360,480]){
       const pages=core.paginate(route.blocks,size);
       assert.deepEqual(pages.flatMap(p=>p.blocks.map(b=>b.id)),route.blocks.map(b=>b.id));
@@ -123,7 +123,7 @@ test('editorial comments are hidden and do not become table cells or prose',()=>
   const x=core.parseMarkdown('# Book\n\n## Route\n\n### One\n\nBefore\n\n<!-- private\neditorial text -->\n\n| A | B |\n| --- | --- |\n| <script> | safe |\n\nAfter');
   assert.deepEqual(x.blocks.map(b=>b.kind),['text','table','text']);
   assert.equal(x.blocks[0].text,'Before');assert.equal(x.blocks[2].text,'After');
-  assert.doesNotMatch(x.blocks.map(b=>b.text).join(''),/private|editorial/);
+  assert.doesNotMatch(x.blocks.filter(b=>b.kind!=='figure').map(b=>b.text).join(''),/private|editorial/);
 });
 
 test('route navigation is available before reading to the end on every page',()=>{

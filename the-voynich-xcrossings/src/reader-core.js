@@ -21,6 +21,8 @@
     }
     for (const raw of source.replace(/\r\n?/g, '\n').split('\n')) {
       const line = raw.trim();
+      const figure = /^<!-- figure:(garden-cross|f38r) -->$/.exec(line);
+      if (figure) { flush(); add(figure[1], 'figure'); continue; }
       if (comment || line.startsWith('<!--')) {
         flushTable(); flush(); comment = !line.includes('-->'); continue;
       }
