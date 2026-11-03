@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="460" height="150" viewBox="0 0 460 150">
+  <rect x="1" y="1" width="458" height="148" rx="10" fill="#f3e7ce" stroke="#b7a383"/>
+  <rect x="155" y="13" width="150" height="100" rx="2" fill="#982c35"/>
+  <path d="M205 24 L230 36 L255 24 L236 57 L269 38 L257 63 L269 88 L236 69 L255 102 L230 90 L205 102 L224 69 L191 88 L203 63 L191 38 L224 57 Z" fill="#fff8ed"/>
+  <text x="230" y="137" font-family="sans-serif" font-size="17" text-anchor="middle" fill="#45382f">聖ヨハネ騎士団の八尖十字</text>
+</svg>
