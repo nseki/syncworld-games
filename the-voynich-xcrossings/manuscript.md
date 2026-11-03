@@ -220,6 +220,8 @@
 
 《Voynich Manuscript — Beinecke MS 408》
 
+<!-- figure:f38r -->
+
 ---
 
 # The Voynich XCrossings

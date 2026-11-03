@@ -60,7 +60,7 @@ test('sixth draft preserves common progress and offers three independent routes'
   const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
   const story=JSON.parse(html.match(/<script id="story-data" type="application\/json">([\s\S]*?)<\/script>/)[1]);
   assert.equal(story.progressVersion,'c1ba2af7557bef9d');
-  assert.equal(story.progressRevision,'draft6-v2');
+  assert.equal(story.progressRevision,'draft6-v3');
   assert.equal(story.edition,'共通部第一〜四部・第6稿');
   assert.deepEqual(story.routes.map(r=>r.url),['./rana/?draft=6','./misha/?draft=6','./mio/?draft=6']);
   assert.match(html,/story\.progressVersion\|\|story\.version/);
