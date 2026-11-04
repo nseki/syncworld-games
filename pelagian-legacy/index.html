@@ -1,0 +1,816 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="キプロスの実景写真とともに読む『ペラギアンの遺産』全九日シナリオ Ver.1.2">
+<title>ペラギアンの遺産｜写真入り試読版</title>
+<style>
+:root {
+  color-scheme: light;
+  --ink: #193331;
+  --muted: #4c625d;
+  --sea: #1d554d;
+  --paper: #f7f4eb;
+  --line: #d1d9cb;
+  --serif: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif CJK JP", serif;
+  font-family: system-ui, sans-serif;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; color: var(--ink); background: var(--paper); }
+a { color: inherit; text-underline-offset: .22em; }
+a:focus-visible, summary:focus-visible, h2:focus-visible { outline: 2px solid #2d776b; outline-offset: 5px; }
+.mast, main, footer { width: min(100% - 36px, 940px); margin-inline: auto; }
+.mast { display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 65px; font-size: .75rem; letter-spacing: .12em; }
+.mast a { padding-block: 14px; }
+.cover { position: relative; min-height: clamp(420px, 66vh, 620px); display: grid; align-items: end; overflow: hidden; isolation: isolate; color: white; background: #234a45; border-radius: 8px; }
+.cover img, .cover::after { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; }
+.cover img { object-fit: cover; }
+.cover::after { content: ""; background: linear-gradient(0deg, #102e2bf5, #14332eaf 43%, transparent 82%); }
+.cover-copy { padding: clamp(22px, 6vw, 64px); }
+.eyebrow { font-size: .76rem; font-weight: 700; letter-spacing: .15em; }
+.cover h1 { font: 500 clamp(2.05rem, 6.5vw, 4.7rem)/1.18 var(--serif); margin: .3em 0; }
+.cover-copy > p:not(.eyebrow) { line-height: 1.9; }
+.action { display: inline-flex; align-items: center; justify-content: center; min-height: 46px; padding: .65rem 1.1rem; border-radius: 4px; background: var(--sea); color: white; text-decoration: none; font-weight: 650; }
+.cover .action { background: #f6edce; color: #193331; margin-top: 10px; }
+.credit, figcaption { color: var(--muted); font-size: .72rem; line-height: 1.65; }
+.contents { margin: 26px 0; padding: 0 16px; border-block: 1px solid var(--line); }
+summary { min-height: 48px; padding-block: 14px; cursor: pointer; font-size: .9rem; font-weight: 650; }
+.contents ol { list-style: none; padding: 0 0 12px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 245px), 1fr)); gap: 4px 12px; margin: 0; }
+.contents a { display: flex; align-items: center; min-height: 44px; padding: 7px 10px; background: #e8ede2; border-radius: 3px; }
+.contents a[aria-current] { background: var(--sea); color: white; }
+.scene { --accent: #26665b; --wash: #edf3ec; margin-bottom: 32px; overflow: clip; border-radius: 6px; border: 1px solid var(--line); background: var(--wash); }
+.scene.ancient { --accent: #84602c; --wash: #f4ecd9; }
+.scene.medieval { --accent: #79463f; --wash: #f1e7df; }
+.scene-heading { padding: 25px clamp(18px, 5vw, 49px); border-top: 5px solid var(--accent); }
+.scene .eyebrow { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 20px; color: var(--accent); margin: 0 0 9px; }
+.scene h2 { font: 500 clamp(1.45rem, 4vw, 2.3rem)/1.5 var(--serif); margin: 0; }
+figure { margin: 0; }
+figure img { display: block; width: 100%; height: clamp(205px, 42vw, 430px); object-fit: cover; }
+figcaption { padding: 8px clamp(18px, 5vw, 49px) 0; }
+.prose { margin: auto; max-width: 760px; padding: clamp(20px, 5vw, 48px); font: clamp(1.04rem, 2.3vw, 1.24rem)/2.02 var(--serif); line-break: strict; overflow-wrap: anywhere; }
+.prose p { margin: 0 0 .95em; }
+.prose p:last-child { margin: 0; }
+.pager { display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; align-items: center; margin-bottom: 22px; }
+.pager .action:first-child { justify-self: start; background: #dde7da; color: var(--ink); }
+.pager .action:last-child { justify-self: end; }
+.pager output { font-size: .8rem; color: var(--muted); }
+footer { padding: 14px 0 40px; border-top: 1px solid var(--line); font-size: .75rem; color: var(--muted); line-height: 1.7; }
+@media (max-width: 480px) { .mast, main, footer { width: calc(100% - 24px); } .cover { min-height: 410px; } .mast { letter-spacing: .06em; } }
+</style>
+</head>
+<body>
+<header class="mast"><a href="../">SYNCWORLD GAMES</a><span>写真入り試読版 · Ver. 1.2</span></header>
+<main>
+  <div class="cover" id="cover">
+    <img src="photos/kourion.webp" alt="クリオンの劇場から見渡すキプロス南岸と地中海" fetchpriority="high">
+    <div class="cover-copy">
+      <p class="eyebrow">THE PELAGIAN LEGACY · CYPRUS</p>
+      <h1>ペラギアンの遺産</h1>
+      <p>キプロスで過ごす九日間。<br>同じ海をめぐる、三つの時代の物語。</p>
+      <a class="action" href="#day-0-1">プロローグから読む →</a>
+    </div>
+  </div>
+  <p class="credit" id="cover-credit">クリオンの劇場から望む地中海 ／ <a href="https://commons.wikimedia.org/wiki/File:Cyprus_coast_from_Kourion_theatre.jpg">Wknight94 · 出典</a> ／ <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a> ／ 縮小・表示時トリミング</p>
+  <details class="contents">
+    <summary>目次 · プロローグと九日間</summary>
+    <ol><li><a href="#day-0-1">プロローグ　船を出す朝</a></li>
+<li><a href="#day-1-1">第一日　冷えたロゼワイン</a></li>
+<li><a href="#day-2-1">第二日　第三巻</a></li>
+<li><a href="#day-3-1">第三日　王が欲しがるもの</a></li>
+<li><a href="#day-4-1">第四日　同じ名前</a></li>
+<li><a href="#day-5-1">第五日　欲しいもの</a></li>
+<li><a href="#day-6-1">第六日　見えない港</a></li>
+<li><a href="#day-7-1">第七日　名前を呼ぶ</a></li>
+<li><a href="#day-8-1">第八日　向こう側</a></li>
+<li><a href="#day-9-1">第九日　帰る船</a></li></ol>
+  </details>
+  <div id="reader">
+    <section class="scene ancient" id="day-0-1" data-day="0"><div class="scene-heading"><p class="eyebrow">古代 · アマトゥス <span>場面 1 / 1</span></p><h2 tabindex="-1">プロローグ　船を出す朝</h2></div><figure><img src="photos/amathus.webp" alt="アマトゥスの遺跡" loading="lazy" decoding="async"><figcaption>アマトゥスの遺跡 ／ <a href="https://commons.wikimedia.org/wiki/File:Amathus-ruins-city.jpg">Shonagon（投稿者） · 出典</a> ／ パブリックドメイン ／ 縮小・表示時トリミング</figcaption></figure><div class="prose"><p><strong>紀元前332年。アマトゥス。</strong></p>
+<p>メノンは、父が渡した縄をもう一度結び直した。</p>
+<p>「そんな結び方じゃ、濡れたらほどけないぞ」</p>
+<p>「ほどけない方がいいだろう」</p>
+<p>「ほどけなければ困る時もある」</p>
+<p>父は手を伸ばし、縄を解いた。指は太く、爪の間には黒い汚れが残っていた。</p>
+<p>「海では、船より先に人を見ろ」</p>
+<p>「またその話か」</p>
+<p>「お前が忘れるからだ」</p>
+<p>岸では、兵士たちが積み荷を数えていた。キプロスの船団は東へ向かう。ティルスを包囲するマケドニアの王に加わるのだという。</p>
+<p>「敵の船でも？」</p>
+<p>「沈んだ船に敵も味方もあるか」</p>
+<p>「あるだろう。戦争なんだから」</p>
+<p>父は縄を巻き直した。</p>
+<p>「そう思う人間が増えると、港は小さくなる」</p>
+<p>メノンには意味が分からなかった。</p>
+<p>近くで幼いニコスが貝殻を並べていた。砂に掘った溝へ波が入るたび、貝殻の船が浮かび、ひっくり返る。</p>
+<p>「こっちの船は入れない」</p>
+<p>メノンが尋ねた。「なぜ？」</p>
+<p>「敵だから」</p>
+<p>「じゃあ、沈んだら？」</p>
+<p>ニコスは考え、貝殻を溝の内側へ移した。</p>
+<p>「沈む前なら、入れていい」</p>
+<p>父が笑った。メノンは笑えなかった。</p>
+<p>船が岸を離れると、家々が小さくなった。水面を黒い背が二つ、並んで横切った。誰かがイルカだと言った。</p>
+<p>「海の王の使いだ」</p>
+<p>別の船乗りが冗談めかして言うと、誰かが唾を吐いて災いを払った。</p>
+<p>船団の書記は笑わなかった。港で聞き集めた話を、小さな板に書き留めている。</p>
+<p>「それも報告するのか」とメノンが聞いた。</p>
+<p>「王の陣営には、海のことを知る者が必要だ。風を読む者、潮を読む者、それから、海を支配したという古い王の話を知る者もな」</p>
+<p>「昔話で戦に勝てるのか」</p>
+<p>「勝てると信じる人間がいるなら、昔話にも値がつく」</p>
+<p>書記は板を伏せた。メノンは、遠くで一列に進む軍船を見た。海の王の話を誰が欲しがっているのか、聞き返す気にはなれなかった。</p>
+<p>メノンは振り返らなかった。</p></div></section>
+<section class="scene modern" id="day-1-1" data-day="1"><div class="scene-heading"><p class="eyebrow">現代 · リマソール <span>場面 1 / 1</span></p><h2 tabindex="-1">第一日　冷えたロゼワイン</h2></div><figure><img src="photos/limassol.webp" alt="リマソール旧港" loading="lazy" decoding="async"><figcaption>リマソール旧港 ／ <a href="https://commons.wikimedia.org/wiki/File:Chypre_Limassol_Vieux_Port_-_panoramio.jpg">rene boulay · 出典</a> ／ <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a> ／ 縮小・表示時トリミング</figcaption></figure><div class="prose"><p><strong>2061年頃。リマソール。</strong></p>
+<p>律がアランのアパートに着いたとき、冷蔵庫にはワインが三本、食べ物はオリーブとチーズしかなかった。</p>
+<p>「君はどうやって生きてるんだ？」</p>
+<p>「非常にうまく」</p>
+<p>「野菜は？」</p>
+<p>「オリーブは植物だよ」</p>
+<p>「フランス人の栄養学は信用できないな」</p>
+<p>アランは窓を開けた。夕方の海が見えた。遠くに貨物船がいる。</p>
+<p>九日分の荷物を床に置いて、律はようやく靴を脱いだ。窓の下では車がゆっくり走り、向かいのベランダでは誰かが洗濯物を取り込んでいる。ニューヨークを出る前に片づけた仕事のことを思い出しかけたが、潮の匂いが先に入ってきた。</p>
+<p>「海が近いね」</p>
+<p>「地図で見たとおりだろう」</p>
+<p>「地図には匂いがない」</p>
+<p>「次の更新でつくかもしれないよ」</p>
+<p>「ようこそキプロスへ。九日間、歴史の話はしないと約束する」</p>
+<p>「君が？」</p>
+<p>「必要がなければ」</p>
+<p>「もう破ってる」</p>
+<p>二人は海辺の食堂へ出た。タコ、トマト、温かいパン。アランはロゼを注文し、律は海を眺めた。</p>
+<p>「昔、この辺りに海の王がいたらしいよ」</p>
+<p>「早いな。歴史の話をしない約束は？」</p>
+<p>「これは伝説だ」</p>
+<p>「考古学者にとって便利な分類だね」</p>
+<p>アランは笑った。</p>
+<p>「明日、アマトゥスへ行こう。海の中に港がある」</p>
+<p>「潜るの？」</p>
+<p>「君が望むなら。まず陸から見よう」</p>
+<p>「海の王はそこで何をしていた？」</p>
+<p>「知らない。いたかどうかも知らない」</p>
+<p>「それでも『王』なんだ」</p>
+<p>「人間は知らないものに、よく王の名をつける」</p>
+<p>律はグラスを持ち上げた。</p>
+<p>「じゃあ、王様に乾杯」</p>
+<p>「存在しなかったかもしれない王に？」</p>
+<p>「一番気楽な相手だろう。税金も取られない」</p>
+<p>食事のあと、二人はすぐには帰らなかった。食堂の椅子は少しがたつき、テーブルの端には前の客がこぼした塩が残っていた。店の人が空いた皿を下げると、律はもう一杯だけ水を頼んだ。</p>
+<p>港の灯りが一つずつ増えていく。さっきまで白かった船体が、暗い海に溶けていった。何かを見つけたわけでも、予定を決めたわけでもない。</p>
+<p>波が石の護岸に当たった。海の向こうは、暗くなり始めていた。</p></div></section>
+<section class="scene modern" id="day-2-1" data-day="2"><div class="scene-heading"><p class="eyebrow">現代 · アマトゥス <span>場面 1 / 2</span></p><h2 tabindex="-1">第二日　第三巻</h2></div><figure><img src="photos/amathus.webp" alt="アマトゥスの遺跡" loading="lazy" decoding="async"><figcaption>アマトゥスの遺跡 ／ <a href="https://commons.wikimedia.org/wiki/File:Amathus-ruins-city.jpg">Shonagon（投稿者） · 出典</a> ／ パブリックドメイン ／ 縮小・表示時トリミング</figcaption></figure><div class="prose"><p>朝、アランは机に紙を広げていた。律がコーヒーをいれる間も、古い図面を見比べている。</p>
+<p>「休暇中じゃなかったのか」</p>
+<p>「僕は休暇だ。資料が休暇を取る必要はない」</p>
+<p>机には、かつて行われたアマトゥスの水中調査の刊行報告書と、別の表紙を持つ薄い束があった。分厚い報告書は二冊。背表紙にはフランス語の題名が並んでいた。</p>
+<p>「なんでフランスの考古学チームが、わざわざキプロスで調査してたんだ？」</p>
+<p>「何を言ってるんだい。ここは三百年近く、フランス系の貴族が王様だった島だよ」</p>
+<p>「フランスの植民地だったの？」</p>
+<p>「違う。エルサレムを失ったフランス人が、代わりにキプロスの王になったんだ」</p>
+<p>「王国を失ったから、別の王国を？」</p>
+<p>「そう。フランス人は昔から、地中海に別荘を持ちたがる」</p>
+<p>「ずいぶん大きな別荘だな」</p>
+<p>「おかげで、今でもパンとワインには困らない」</p>
+<p>「それはフランス人のおかげなのか？」</p>
+<p>「君は歴史に感謝するということを知らないのか？」</p>
+<p>律は報告書を持ち上げた。</p>
+<p>「で、この二冊も、別荘の管理記録？」</p>
+<p>「調査から何十年もかけて刊行した研究成果だ。フランス人は仕事が遅いんじゃない。時間の使い方を知っている」</p>
+<p>「昨日のワインの選び方を見れば分かるよ」</p>
+<p>律はその隣の、薄い束を指した。</p>
+<p>「三冊目？」</p>
+<p>「正式な第三巻じゃない。出るはずだった、という話と、残った草稿の断片だ。出なかった理由も、誰がどこまで書いたかも、まだ整理できていない」</p>
+<p>「失われた秘巻？」</p>
+<p>「そう呼ぶと研究費が増えるなら、考えてもいい」</p>
+<p>律は笑った。</p>
+<p>アマトゥスでは、丘の上の石が日差しを受けて白かった。海は近い。アランは港の位置を指した。</p>
+<p>律は日陰を探して、低い壁に腰を下ろした。乾いた草が風に伏せ、遠くの道路から車の音がかすかに届く。古代の港を眺めに来たはずなのに、まず気になったのは、今すぐ泳げそうな海の色だった。</p>
+<p>「ここで一時間ぐらい昼寝したい」</p>
+<p>「遺跡の上では遠慮してくれ」</p>
+<p>「考古学者は休暇中も厳しいね」</p>
+<p>「石は僕らよりずっと長くここにいる。少し敬意を払ってほしい」</p>
+<p>「昔の調査図で、説明がうまくつかない部分がある。構造物なのか、後から移動した石なのか、判断が割れている」</p>
+<p>「そこに海の王の宮殿が？」</p>
+<p>「まず君は宮殿から離れたまえ」</p>
+<p>「王様なのに住むところがないなんて」</p>
+<p>「人間の王じゃなければ？」</p>
+<p>律は海を見た。</p>
+<p>「海に住む王か。イルカみたいな？」</p>
+<p>「海の知性についての伝承はある。ただ、伝承は証拠ではない」</p>
+<p>「でも、面白い」</p>
+<p>「それは否定しない」</p>
+<p>アランは草稿の複写を見せた。港の一角について、二通りの読み方が書かれていた。軍船を守る施設か、交易船のためのものか。さらに余白に、別の筆跡で短い注記があった。</p>
+<p><em>『海の王の贈り物』という地元の呼称については、記録者の説明を要確認。</em></p>
+<p>「贈り物？」</p>
+<p>「何を指すのか不明だ。港そのものか、航海の技術か、ただの地名かもしれない」</p>
+<p>「王様が港をプレゼントした、と」</p>
+<p>「君は本当に王様が好きだね」</p>
+<p>「昔の王様も、そうだったんじゃないか。海の王から何か奪えると思って」</p>
+<p>「征服する側は、何でも戦利品に見える。石の港も、航海の知恵も、ただの伝説も」</p>
+<p>「で、何が見つかった？」</p>
+<p>「君が今見ている、石と解釈の違いだよ」</p>
+<p>律は崩れた石の先の海を見た。</p>
+<p>「でも、もしイルカがものすごく賢くなったら、港なんか作るかな」</p>
+<p>「人間のためなら作るかもしれない。自分たちには必要ないだろう」</p>
+<p>「じゃあ何を残す？」</p>
+<p>アランは答えなかった。</p>
+<p>午後は海辺のカフェで過ごした。アランが報告書を開いたまま冷たい飲み物を飲み、律は端末に撮った写真を並べた。石の写真ばかりだと気づいて、海を一枚追加した。海の方がずっときれいに写っていた。</p>
+<p>その日の夕方、律は浜辺で泳ぐ子供たちを見た。波打ち際で一人が転ぶと、隣の子が手を伸ばした。誰もその行為に名前をつけなかった。</p></div></section>
+<section class="scene ancient" id="day-2-2" data-day="2"><div class="scene-heading"><p class="eyebrow">古代 <span>場面 2 / 2</span></p><h2 tabindex="-1">第二日　第三巻</h2></div><figure><img src="photos/amathus.webp" alt="アマトゥスの遺跡" loading="lazy" decoding="async"><figcaption>アマトゥスの遺跡 ／ <a href="https://commons.wikimedia.org/wiki/File:Amathus-ruins-city.jpg">Shonagon（投稿者） · 出典</a> ／ パブリックドメイン ／ 縮小・表示時トリミング</figcaption></figure><div class="prose"><p><strong>紀元前332年。アマトゥス。</strong></p>
+<p>テアは、港へ運ばれてきた男に水を差し出した。男は船乗りで、病人のために淡水を求めていた。</p>
+<p>「どこの船？」</p>
+<p>「北から来た」</p>
+<p>「どこの港を出たの？」</p>
+<p>男は答えをためらった。</p>
+<p>テアは桶を押し出した。</p>
+<p>「水を持っていって。話はあとで」</p>
+<p>男は彼女を見つめた。</p>
+<p>「代金は？」</p>
+<p>「次に誰かが困っていたら、その人に返して」</p>
+<p>男が去ると、隣の商人が言った。</p>
+<p>「どこの人間か確かめもしないのか」</p>
+<p>「喉が渇いていることは確かめたわ」</p>
+<p>「商売には向いていないな」</p>
+<p>「水は売ってないもの」</p>
+<p>商人は肩をすくめた。</p>
+<p>その夜、テアは祖母から昔話を聞いた。海の王は、船を導く道を人間に教えたのだという。</p>
+<p>「道？」</p>
+<p>「そう伝わってる」</p>
+<p>「どこにあるの？」</p>
+<p>「海の上には見えないよ」</p>
+<p>「じゃあ、どうやって教えたの？」</p>
+<p>祖母は笑った。</p>
+<p>「それが分かれば、もう昔話じゃない」</p></div></section>
+<section class="scene modern" id="day-3-1" data-day="3"><div class="scene-heading"><p class="eyebrow">現代 · クリオン <span>場面 1 / 2</span></p><h2 tabindex="-1">第三日　王が欲しがるもの</h2></div><figure><img src="photos/kourion.webp" alt="クリオンの劇場から望む地中海" loading="lazy" decoding="async"><figcaption>クリオンの劇場から望む地中海 ／ <a href="https://commons.wikimedia.org/wiki/File:Cyprus_coast_from_Kourion_theatre.jpg">Wknight94 · 出典</a> ／ <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a> ／ 縮小・表示時トリミング</figcaption></figure><div class="prose"><p>クリオンの劇場で、律は客席の上段に座った。</p>
+<p>背後には明るい空、前方には地中海が広がっていた。石段は日差しで温まり、風だけが涼しい。律は舞台を撮ろうとして、どうしても海が画面に入り込むことに気づいた。</p>
+<p>「演目より景色が勝ちそうだ」</p>
+<p>「役者には気の毒だね」</p>
+<p>「ここで演説したら、誰でも偉くなった気がするね」</p>
+<p>「それは現代でも変わらないだろう」</p>
+<p>「イベント業界への批判？」</p>
+<p>「観察だよ」</p>
+<p>二人はコロッシの方へ車を走らせた。道沿いには低い家々と畑が続き、車窓を流れる木々の影が律の膝の上を横切った。アランは近道だと言って細い道へ入り、結局、道端の店で果物を買うことになった。</p>
+<p>「近道だった？」</p>
+<p>「人生全体で考えれば」</p>
+<p>午後にはワインを飲んだ。アランは甘いワインの由来を長々と説明したが、律は途中で遮った。</p>
+<p>「要するに、君はもう一杯飲みたいんだろ」</p>
+<p>「正確な理解だ」</p>
+<p>食後、律が尋ねた。</p>
+<p>「海の王が本当にいたとして、古代の王たちは何を欲しがったと思う？」</p>
+<p>「航海の安全、敵より早く船を動かす方法。王なら、たぶんそういうものだ」</p>
+<p>「経験を共有する知性だったら？」</p>
+<p>「何だって？」</p>
+<p>「イルカが互いに見たものを、言葉以上に伝えられるとしたら。海の中の様子を全部共有できる」</p>
+<p>「ずいぶん便利な仮説だ」</p>
+<p>「王様なら欲しいだろう？」</p>
+<p>「間違いなく。ただし、それを理解できたとは限らない」</p></div></section>
+<section class="scene ancient" id="day-3-2" data-day="3"><div class="scene-heading"><p class="eyebrow">古代 <span>場面 2 / 2</span></p><h2 tabindex="-1">第三日　王が欲しがるもの</h2></div><div class="prose"><p><strong>紀元前332年。ティルス沖。</strong></p>
+<p>船団には、王の陣営へ送る報告が集められていた。どの港が協力するか、どこで水が得られるか、どの水路が敵の目を避けられるか。ある書記は、アマトゥスに残る「海の王が道を教えた」という伝承まで書き加えた。</p>
+<p>「それが本当なら、王は欲しがるだろうな」と船長が言った。</p>
+<p>「何をです？」</p>
+<p>「敵の船より先に敵の船を見つける方法さ。海が全部見えていたら、負けようがない」</p>
+<p>「海の王がそんなことを教えたと？」</p>
+<p>「教えたかどうかはどうでもいい。王が欲しいのは勝つ方法だ」</p>
+<p>メノンは船の外へ目をやった。遠くに、軍船の残骸が漂っていた。</p>
+<p>海上で、キプロスの船が一隻、進路を変えた。メノンは櫂の列から身を乗り出した。</p>
+<p>海には男が浮いていた。自分たちと違う装備を身につけている。</p>
+<p>「敵だ！」</p>
+<p>誰かが叫んだ。</p>
+<p>船長は舵を戻すよう命じた。だがメノンは縄をつかんだ。</p>
+<p>「まだ生きている！」</p>
+<p>「戻れ！」</p>
+<p>「縄を投げるだけだ！」</p>
+<p>メノンは投げた。男はつかめなかった。二度目の縄が水に落ちたとき、船長は怒鳴った。</p>
+<p>「お前が落ちたら、拾わんぞ！」</p>
+<p>メノンは縁から身を乗り出し、男の手首をつかんだ。隣の漕ぎ手が黙って彼の腰を押さえた。</p>
+<p>引き上げた男は水を吐き、震えていた。船長は男を見下ろした。</p>
+<p>「お前は、こいつのために船を危険にさらした」</p>
+<p>「見捨てれば、死んだ」</p>
+<p>「それが戦争だ」</p>
+<p>メノンは返事をしなかった。</p>
+<p>男が身につけていた小さな紐飾りを、誰かが引きちぎった。敵の印だという。</p>
+<p>メノンはそれを拾い、男のそばへ置いた。</p>
+<p>その晩、メノンは見張りを命じられた。救った男が逃げないように、という理由だった。</p>
+<p>男はかすれた声で何か言った。メノンには言葉が分からなかった。</p>
+<p>二人は長いあいだ、海の音を聞いていた。</p></div></section>
+<section class="scene modern" id="day-4-1" data-day="4"><div class="scene-heading"><p class="eyebrow">現代 · トロードス山麓 <span>場面 1 / 3</span></p><h2 tabindex="-1">第四日　同じ名前</h2></div><figure><img src="photos/omodos.webp" alt="トロードス山地のオモドス村（山村の参考風景）" loading="lazy" decoding="async"><figcaption>トロードス山地のオモドス村（山村の参考風景） ／ <a href="https://commons.wikimedia.org/wiki/File:Omodos_street_2010.jpg">Wknight94 · 出典</a> ／ <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a> ／ 縮小・表示時トリミング</figcaption></figure><div class="prose"><p>トロードス山麓の村では、石の家の間を猫が歩いていた。山から吹く風は海辺より少し涼しい。窓辺に鉢植えが並び、路地の先では老人が椅子を日陰へ移していた。</p>
+<p>二人は車を降りてから、しばらく目的もなく歩いた。律は石畳の模様を写真に撮り、アランはそれが何でもない路地だと教えた。</p>
+<p>「何でもない路地を撮っちゃいけない？」</p>
+<p>「むしろ、そういう写真の方があとで見返すだろうね」昼食の前に立ち寄った小さな展示室に、アランが足を止めた。</p>
+<p>「これを見てくれ」</p>
+<p>律は説明板を読んだ。古い航海の守護伝承に関する展示だった。海に救われた者が、次の遭難者を救うという習慣。その呼び名の一つに、ペラギアンに似た音が記されていた。</p>
+<p>「また海の王？」</p>
+<p>「そう書いたのはずっと後の人間だ。名前の伝わり方も怪しい」</p>
+<p>「じゃあ、なぜ展示してる？」</p>
+<p>「分からないものも、歴史の一部だからさ」</p>
+<p>「研究者にとっては最高の言い訳だな」</p>
+<p>アランは別の説明を指した。中世には、その呼び名が神学上の異端の名前と取り違えられた、という伝承があるらしい。</p>
+<p>「海の話が宗教の話になったの？」</p>
+<p>「言葉は持ち主を選ばない」</p>
+<p>「便利な王様だ。軍人にも聖職者にも使われる」</p>
+<p>「だから、僕は王様だと決めつけたくない」</p>
+<p>外へ出ると、鐘が鳴った。広場の端には小さな店があり、焼いたパンの匂いが通りまで流れていた。律はまだ温かいパンを買い、紙袋の口を開けてアランに半分渡した。指先に粉がついた。</p>
+<p>「これは何派のパン？」</p>
+<p>「食べられる派だ」</p>
+<p>「フランス人がそんな妥協を？」</p>
+<p>「君といると、基準が下がる」</p></div></section>
+<section class="scene medieval" id="day-4-2" data-day="4"><div class="scene-heading"><p class="eyebrow">中世 <span>場面 2 / 3</span></p><h2 tabindex="-1">第四日　同じ名前</h2></div><div class="prose"><p><strong>1231年。キプロス。カンタラの修道士たちが処刑されたという知らせが届いた翌朝。</strong></p>
+<p><em>あの人たちが死ななければ、次は私たちだったのかもしれない。</em></p>
+<p><em>彼らが何を信じ、何を拒んだのか、私はよく知らない。顔も知らない。けれど、数日前まで私たちの集まりについて尋ねていた役人は、もう来なくなった。</em></p>
+<p><em>昨日まで、戸を叩く音が怖かった。今朝は、誰も叩かないことが怖い。</em></p>
+<p>男はパンを布で包んだ。まだ温かかった。</p>
+<p>「隠す必要なんてないでしょう」</p>
+<p>妻が言った。</p>
+<p>「今はある」</p>
+<p>「パンよ」</p>
+<p>「知っている」</p>
+<p>男は包みを棚へ押し込んだ。何を恐れているのか、自分でも言えなかった。戸が叩かれた。</p>
+<p>訪ねてきたのは隣人だった。男は安堵し、同時に、棚に目をやった自分を恥じた。</p>
+<p>「修道士たちのことを聞いたか」</p>
+<p>男はうなずいた。妻が尋ねた。</p>
+<p>「パンのことで死んだって、本当？」</p>
+<p>隣人は卓のパンを見た。</p>
+<p>「膨らませたパンか、膨らませないパンか。そんな話もあったらしい」</p>
+<p>「それだけ？」</p>
+<p>「それだけで済む話なら、あんなことにはならなかっただろう」</p>
+<p>妻はしばらく黙っていた。棚から包みを取り出し、パンを卓に戻した。</p>
+<p>「私たちのは、ただの朝ごはんね」</p>
+<p>男は答えなかった。</p>
+<p>隣人は声を落とした。</p>
+<p>「港の役人が、帳面を持って別の仕事へ回されたそうだ」</p>
+<p>「私たちの帳面か？」</p>
+<p>「分からない。修道士たちの件で、上から人を集めるよう言われたらしい」</p>
+<p>「それで、もう調べに来ない？」</p>
+<p>「今日のところはな」</p>
+<p>男はパンに手を伸ばしかけ、やめた。</p>
+<p>「私たちは何をしたの？」と妻が聞いた。</p>
+<p>「名前を呼んだだけだ」</p>
+<p>「じゃあ、そう言えばいいでしょう」</p>
+<p>男は棚を見た。さっき自分が何をしたか、妻は見ている。</p>
+<p><em>助かった、と妻には言えなかった。誰かが死んだことを、私たちの幸運と呼んでいいのだろうか。</em></p>
+<p>妻はパンをちぎり、隣人にも差し出した。男は黙って自分の分を受け取った。</p></div></section>
+<section class="scene medieval" id="day-4-3" data-day="4"><div class="scene-heading"><p class="eyebrow">中世 <span>場面 3 / 3</span></p><h2 tabindex="-1">第四日　同じ名前</h2></div><div class="prose"><p><strong>数年前。南岸の港町。</strong></p>
+<p>まだ、誰も自分たちの集まりの名前を恐れてはいなかった。</p>
+<p>マリアとサラは、港の端で魚を分けていた。サラの知り合いの船が嵐を避けて入港し、荷を下ろせずにいた。</p>
+<p>「この人たち、誰？」とマリア。</p>
+<p>「昨日までは知らない人たち」</p>
+<p>「今日は？」</p>
+<p>「魚を分ける人たち」</p>
+<p>男が近づき、礼を言った。別の言葉を話す人間だったので、サラが通訳した。</p>
+<p>「港の組合に入っていない船は、いつまでも助けてもらえない」</p>
+<p>マリアが言うと、サラは肩をすくめた。</p>
+<p>「だったら、組合じゃないやり方を考えればいい」</p>
+<p>「名前は？」</p>
+<p>「名前なんかいる？」</p>
+<p>背後で年配の船乗りが笑った。</p>
+<p>「昔は海の王の約束と呼んだもんだ」</p>
+<p>「何それ？」</p>
+<p>「爺さんの口癖さ。船を出すときも、知らない港に入るときも言っていた」</p>
+<p>船乗りは杯を持ち上げた。何かの儀式というより、食事の前の挨拶のような調子だった。</p>
+<p>「ペラギアン、海の王よ。異なる言葉を話す者、異なる神を信じる者を、同じ港へ導き給え」</p>
+<p>マリアは手を止めた。</p>
+<p>「それ、どこの神様へのお祈り？」</p>
+<p>「神様かどうかも知らん。爺さんは、沖を群れで泳ぐ海の古い王たちの名だと言っていた。人間だったとは聞いてないな」</p>
+<p>「じゃあ、どうして祈るの？」</p>
+<p>「嵐のとき、隣の船が何を信じているかなんて聞いていられんだろう」</p>
+<p>サラは、魚を待っている船乗りたちを見回した。</p>
+<p>「同じ港に入れれば、まずは十分ね」</p>
+<p>誰かが笑い、別の誰かがパンをちぎった。マリアも杯を上げた。言葉の意味を知っている者が何人いたかは、分からなかった。</p></div></section>
+<section class="scene modern" id="day-5-1" data-day="5"><div class="scene-heading"><p class="eyebrow">現代 · パフォス <span>場面 1 / 3</span></p><h2 tabindex="-1">第五日　欲しいもの</h2></div><figure><img src="photos/paphos.webp" alt="パフォス、ディオニュソスの館のモザイク" loading="lazy" decoding="async"><figcaption>パフォス、ディオニュソスの館のモザイク ／ <a href="https://commons.wikimedia.org/wiki/File:Mosaic-House_of_Dionysos-Paphos.jpg">Shonagon（投稿者） · 出典</a> ／ パブリックドメイン ／ 縮小・表示時トリミング</figcaption></figure><div class="prose"><p>パフォスのモザイクを見ながら、律は言った。</p>
+<p>床に残る細かな石片は、近づくと一つずつ色が違った。離れて見ると人物や動物が現れ、また近づくと、ただの石に戻る。律は同じ場所を二度行き来した。</p>
+<p>「写真にすると平らだな」</p>
+<p>「もともと床だよ」</p>
+<p>「そういう意味じゃない」</p>
+<p>「神様も王様も、昔の人はずいぶん忙しかったんだね」</p>
+<p>「現代人が暇になったわけじゃない。仕事の名前が変わっただけだ」</p>
+<p>港で昼食をとった。漁船の向こうに観光船が並び、テーブルには小皿が次々と運ばれてきた。律はどれが注文した料理なのか分からなくなり、アランは分からなくても食べられると答えた。焼いたハルミ、オリーブ、野菜、魚。二人はパンの話になった。</p>
+<p>「ニューヨークで言えば、ベーグルかクロワッサンか。それが問題だ」</p>
+<p>「君はベーグルとクロワッサンを同列に扱うのか？」</p>
+<p>「ほら、もう宗教戦争が始まった」</p>
+<p>「食文化を議論しているだけだ」</p>
+<p>「時代が違えば、僕は処刑されてるな」</p>
+<p>「フランスなら、まずまともなパンを食べさせて教育する」</p>
+<p>律は笑ったが、アランは少ししてから言った。</p>
+<p>「実際、昔はパンの違いが、もっと大きな対立の印になったことがある」</p>
+<p>「本当にパンが問題だった？」</p>
+<p>「パンだけなら、歴史家はもっと楽だっただろうね」</p>
+<p>午後、アランは第三巻の草稿の別のページを見せた。古い伝承の採録者は、海の王の「贈り物」を、港の安全を守る決まりごとだと解釈していた。一方、別の注記では、海戦に勝つための知識だったとされている。</p>
+<p>「どっちが正しい？」</p>
+<p>「両方間違っているかもしれない」</p>
+<p>「じゃあ、何も分からないじゃないか」</p>
+<p>「そういう仕事なんだよ」</p>
+<p>律は紙を見た。</p>
+<p>「王は勝つための力を欲しがり、商人は安全な港を欲しがる。みんな自分の欲しいものを見てるんだね」</p>
+<p>「君もだよ」</p>
+<p>「僕は何を欲しがってる？」</p>
+<p>「それを僕に聞くのか？」</p>
+<p>律は返事の代わりにワインを飲んだ。</p></div></section>
+<section class="scene ancient" id="day-5-2" data-day="5"><div class="scene-heading"><p class="eyebrow">古代 <span>場面 2 / 3</span></p><h2 tabindex="-1">第五日　欲しいもの</h2></div><div class="prose"><p><strong>紀元前332年。ティルス沖。</strong></p>
+<p>救われた男は、メノンの船から別の船へ移されることになった。捕虜として扱われるらしい。</p>
+<p>「助けたのに、結局そうなるのか」</p>
+<p>メノンが言うと、隣の漕ぎ手は答えた。</p>
+<p>「海から助けた。戦争から助けたわけじゃない」</p>
+<p>「違うのか」</p>
+<p>「違うさ」</p>
+<p>男はメノンに向かって、何度も同じ言葉を繰り返した。意味は分からない。</p>
+<p>メノンは手を上げた。男も手を上げた。</p>
+<p>それだけだった。</p></div></section>
+<section class="scene medieval" id="day-5-3" data-day="5"><div class="scene-heading"><p class="eyebrow">中世 <span>場面 3 / 3</span></p><h2 tabindex="-1">第五日　欲しいもの</h2></div><div class="prose"><p><strong>1220年代末。南岸の港町。</strong></p>
+<p>サラの家で、マリアは異なる言葉を話す船乗りたちと食事をした。誰かが祈り、誰かは黙って待ち、誰かは先にパンを食べ始めた。</p>
+<p>「みんな違うやり方ね」</p>
+<p>「腹が減るのは同じよ」とサラ。</p>
+<p>食事が終わるころ、年配の船乗りがいつものように杯を上げた。</p>
+<p>「ペラギアン、海の王よ……」</p>
+<p>居合わせた書記が顔を上げた。</p>
+<p>「いま、何と言った？」</p>
+<p>「船を出すときの挨拶さ」</p>
+<p>「もう一度、名を」</p>
+<p>「ペラギアン」</p>
+<p>書記は卓の端に置いた帳面を開いた。</p>
+<p>「誰に教わった？」</p>
+<p>「爺さんに。ずっと昔に死んだよ」</p>
+<p>「その人は、どんな教えを説いていた？」</p>
+<p>船乗りは笑った。</p>
+<p>「風が変わる前に帆を畳め、とかね」</p>
+<p>書記は笑わず、筆を走らせた。</p>
+<p>「何を書いたの？」とサラが聞いた。</p>
+<p>「聞いた名と、ここに集まった人々のことだ」</p>
+<p>「船乗りの挨拶よ。誰かの教えじゃない」</p>
+<p>「そう聞いた、と書く」</p>
+<p>「そのまま書いてくれる？」</p>
+<p>「そう聞いた、と書いておく」</p>
+<p>書記は再び筆を動かした。サラの席からは、帳面の文字が見えなかった。やがて書記は帳面を閉じた。</p>
+<p>その夜、マリアは尋ねた。</p>
+<p>「追いかけて、確かめた方がよかったかな」</p>
+<p>「何を？」</p>
+<p>「私たちが何を言ったことになったか」</p>
+<p>サラは答えなかった。</p>
+<p>数日後、港の帳簿を扱う役人がサラのところへ来た。</p>
+<p>「この名で出入りしている者を教えてほしい」</p>
+<p>役人の紙には、聞き覚えのある名が記されていた。その下には、サラたちが口にした覚えのない言葉が並んでいた。</p>
+<p>「その名前は、海で助け合うときの呼び名です」</p>
+<p>「では、そう申し立ててください」</p>
+<p>「誰に？」</p>
+<p>役人は紙を折った。</p>
+<p>「こちらで確かめます。荷物に同じ印をつけているのは、なぜですか」</p>
+<p>サラは荷物に結ばれた小さな縄の印を見た。誰が最初に考えたのか、覚えていなかった。</p>
+<p>「預けた人に、返せるように」</p>
+<p>役人はその答えも書き留めた。</p></div></section>
+<section class="scene modern" id="day-6-1" data-day="6"><div class="scene-heading"><p class="eyebrow">現代 · キプロス南岸 <span>場面 1 / 3</span></p><h2 tabindex="-1">第六日　見えない港</h2></div><div class="prose"><p>朝、律はアランのアパートのソファで資料を読んでいた。</p>
+<p>窓から差す光が床を少しずつ移動していた。アランは台所で果物を切っている。律は一ページ読んでは海を眺め、また同じ行に戻った。誰にも急かされないと、読書の進み方まで変わるらしい。</p>
+<p>「第三巻の話、少し分かってきた」</p>
+<p>「ほう」</p>
+<p>「何も分かっていないということが」</p>
+<p>「立派な研究者になれるよ」</p>
+<p>二人は海へ泳ぎに行った。岩場から少し離れたところで海に入り、岸の白い石が水越しに揺れるのを見た。潜ると耳の中が静かになり、自分の息の音だけが大きくなる。水面の下には岩があり、魚の群れが方向を変える。律は息を継ぎながら、遠くを泳ぐ二つの背を見た。イルカだったのか、波だったのか、確かめる前に消えた。</p>
+<p>昼、海沿いの店で律が言った。</p>
+<p>「もし海の王が、イルカみたいな生き物の集まりだったら？」</p>
+<p>「続けたまえ」</p>
+<p>「お互いの見たものや感じたことを、言葉にしなくても共有できる。船が沈みそうなら、誰か一人が見ればみんな分かる」</p>
+<p>「分かったとして、助けるとは限らない」</p>
+<p>「君はいつも夢がないな」</p>
+<p>「夢に条件をつけるのが僕の仕事だ」</p>
+<p>「でも、そんな知性にとって、港って何だろう」</p>
+<p>「避難する場所じゃないか。あるいは、集まって何かを交換する場所」</p>
+<p>「物じゃなくて、経験を？」</p>
+<p>「仮にね」</p>
+<p>律は笑った。</p>
+<p>「それなら、海の王の遺産は石の港じゃないかもしれない」</p>
+<p>アランはグラスを置いた。</p>
+<p>「そこは面白い。ただし、面白い仮説と正しい仮説は違う」</p>
+<p>「分かってる。休暇の話だから」</p></div></section>
+<section class="scene ancient" id="day-6-2" data-day="6"><div class="scene-heading"><p class="eyebrow">古代 <span>場面 2 / 3</span></p><h2 tabindex="-1">第六日　見えない港</h2></div><figure><img src="photos/amathus.webp" alt="アマトゥスの遺跡" loading="lazy" decoding="async"><figcaption>アマトゥスの遺跡 ／ <a href="https://commons.wikimedia.org/wiki/File:Amathus-ruins-city.jpg">Shonagon（投稿者） · 出典</a> ／ パブリックドメイン ／ 縮小・表示時トリミング</figcaption></figure><div class="prose"><p><strong>紀元前306年頃。アマトゥス。</strong></p>
+<p>海戦の知らせが届いた。誰が勝ったかより先に、何隻戻らないかが港に伝わった。</p>
+<p>年老いたテアは、若い港湾役人が持ってきた図面を見ていた。</p>
+<p>「ここに防波の施設を増やす。海を押さえれば、次の戦いに備えられる」</p>
+<p>「ここは、風が変わると波が回り込む」</p>
+<p>「古い言い伝えでは、海の王が道を教えたそうですね」</p>
+<p>「言い伝えは船を浮かべないよ」</p>
+<p>役人は図面を叩いた。</p>
+<p>「昔の港がどこにあったか、知りたいんです。王が求めている」</p>
+<p>「王はいつも何かを求めるね」</p>
+<p>「勝つためです」</p>
+<p>テアは海を見た。</p>
+<p>「海がどこを通りたいか、先に聞いたらどうだい」</p>
+<p>「海は答えません」</p>
+<p>「だから、見て覚えるんだよ」</p>
+<p>役人は不満そうだった。</p>
+<p>テアの弟ニコスは、今では船を修理する男になっていた。役人が去ると、ニコスは言った。</p>
+<p>「また、海の王の港を探している」</p>
+<p>「見つかるといいね」</p>
+<p>「本当にそう思う？」</p>
+<p>「港を探す人間は、たいてい自分の船を入れたいだけさ」</p>
+<p>その晩、嵐で一隻の小船が入江に入ってきた。港の見張りは許可を出さなかった。船は敵側の港から来ていた。</p>
+<p>ニコスは修理用の舟を出した。</p>
+<p>「今度はお前か」とテア。</p>
+<p>「昔、砂の港にどの船でも入れたら、兄さんに笑われた」</p>
+<p>「メノンは笑わなかったよ」</p>
+<p>ニコスは櫂を取った。</p>
+<p>「じゃあ、正しかったのかな」</p>
+<p>「さあね。帰ってから話そう」</p></div></section>
+<section class="scene medieval" id="day-6-3" data-day="6"><div class="scene-heading"><p class="eyebrow">中世 <span>場面 3 / 3</span></p><h2 tabindex="-1">第六日　見えない港</h2></div><div class="prose"><p><strong>1231年。南岸の港町。処刑の知らせが届く数日前。</strong></p>
+<p>マリアとサラは日の出前に倉庫へ向かった。預かった布の包みと、その中に縫い込まれた手紙を取り戻すためだった。</p>
+<p>「届けない方がいい」とサラが言った。</p>
+<p>「姉さんからの手紙よ。待っている人がいる」</p>
+<p>「手紙に名前がある。あの人まで調べられるかもしれない」</p>
+<p>「だからって、黙って預かったままにするの？」</p>
+<p>「知らなければ、聞かれても答えずに済む」</p>
+<p>マリアは立ち止まった。</p>
+<p>「それは、私たちが決めること？」</p>
+<p>サラはすぐには答えなかった。</p>
+<p>「会いに行こう」と言った。「手紙を持って。受け取るかどうかは、本人に聞く」</p>
+<p>「危険だって、先に言うのね」</p>
+<p>「言わずに渡す方が怖い」</p>
+<p>倉庫番は鍵を開けた。</p>
+<p>「今日から管理が変わる。急いでくれ」</p>
+<p>「何が変わるの？」</p>
+<p>「誰が許可を出すかだ。荷物の出入りも、名前を照らして調べるそうだ」</p>
+<p>包みはすぐに見つかった。手紙には、離れ離れになった家族が預けた衣類と、町にいる受取人の名前が書かれていた。何も秘密はなかった。</p>
+<p>外で足音がした。倉庫番は二人を押し出し、扉を閉めた。</p>
+<p>「昨日のうちに渡したことにしよう」</p>
+<p>「でも今日は……」</p>
+<p>「昨日は、まだ私が管理していた」</p>
+<p>マリアは包みを抱えて走った。サラは後を追った。</p></div></section>
+<section class="scene modern" id="day-7-1" data-day="7"><div class="scene-heading"><p class="eyebrow">現代 · リマソール <span>場面 1 / 4</span></p><h2 tabindex="-1">第七日　名前を呼ぶ</h2></div><figure><img src="photos/castle.webp" alt="リマソール城広場" loading="lazy" decoding="async"><figcaption>リマソール城広場 ／ <a href="https://commons.wikimedia.org/wiki/File:Limassol_Castle_Square_4.jpg">Tech bro · 出典</a> ／ <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a> ／ 縮小・表示時トリミング</figcaption></figure><div class="prose"><p>リマソールの城を見終えたとき、律はアランに言った。</p>
+<p>城の外では、日差しの下を買い物袋を持った人々が行き交っていた。律は入口のそばで買った冷たい飲み物を飲み、アランは城壁の石について説明しかけたが、律が先に言った。</p>
+<p>「その石が何世紀のものかは、昼食のあとにして」</p>
+<p>「僕はまだ何も言っていない」</p>
+<p>「表情で分かる」</p>
+<p>「古いものが残るって、どういうことなんだろうね」</p>
+<p>「急にどうした」</p>
+<p>「石は残る。名前も残る。でも、その人が何を考えていたかは、たいてい残らない」</p>
+<p>「残っていても、読めるとは限らない」</p>
+<p>「第三巻も？」</p>
+<p>「またそれか」</p>
+<p>「君の方から持ち出したんだよ」</p>
+<p>アランは少し黙ってから、複写の一枚を出した。草稿には、海中の石の配置を「人工の港湾設備」と見る説と、別の自然的説明が並んでいた。後年の整理で採用されなかった読みもある。</p>
+<p>「僕が気になっているのは、隠された真実じゃない。なぜ当時の研究者が、あれを港だと見たのか。その判断の過程だ」</p>
+<p>「君も自分の見たいものを見てる？」</p>
+<p>「当然。だから他人の記録を読む」</p>
+<p>二人は市場で食べ物を買った。熟れたトマトを選び、ハーブの束を嗅ぎ、予定になかった果物まで袋に入れた。帰り道、律は何を作るか聞いた。</p>
+<p>「冷蔵庫の中身次第だ」</p>
+<p>「考古学より柔軟だね」</p>
+<p>「考古学にも、そうあってほしい」</p>
+<p>アパートで夕食を作った。アランはオリーブの切り方にまで注文をつけ、律はその度に大げさに謝った。</p></div></section>
+<section class="scene medieval" id="day-7-2" data-day="7"><div class="scene-heading"><p class="eyebrow">中世 <span>場面 2 / 4</span></p><h2 tabindex="-1">第七日　名前を呼ぶ</h2></div><div class="prose"><p><strong>1231年。南岸の港町。</strong></p>
+<p>手紙の受取人は縄職人の妹だった。彼女は包みの中の子供の上着を見て、指で刺繍をなぞった。</p>
+<p>「姉の縫い方です」</p>
+<p>「手紙もあるわ」とマリア。</p>
+<p>女は紙を見たが、手を出さなかった。</p>
+<p>「私の名前が書いてある？」</p>
+<p>「ええ」</p>
+<p>「誰が運んできたかも？」</p>
+<p>「書いてあるかもしれない」とサラが答えた。「読んでいないの」</p>
+<p>女は上着を胸に寄せた。</p>
+<p>「じゃあ、読まないで」</p>
+<p>「でも、姉さんからよ」とマリアが言った。</p>
+<p>「知ってる。だから、ここまで持ってきてくれてありがとう」</p>
+<p>女は扉の外を見た。</p>
+<p>「私が誰とつながっているか、もう調べられている。紙まであれば、姉の家族も困る」</p>
+<p>マリアは手紙を差し出しかけた。</p>
+<p>女は首を振った。</p>
+<p>「持って帰って」</p>
+<p>マリアは手を下ろした。女は上着だけを受け取り、戸を閉めた。</p>
+<p>帰り道、マリアは手紙を取り出した。封はまだ閉じている。</p>
+<p>「燃やす？」</p>
+<p>「いまは、しまっておこう」</p>
+<p>「私たち、姉さんの言葉を隠すことになる」</p>
+<p>「そうね」</p>
+<p>「それでいいのかな」</p>
+<p>サラは答えなかった。二人は手紙を持って帰った。</p></div></section>
+<section class="scene medieval" id="day-7-3" data-day="7"><div class="scene-heading"><p class="eyebrow">中世 <span>場面 3 / 4</span></p><h2 tabindex="-1">第七日　名前を呼ぶ</h2></div><div class="prose"><p><strong>1231年。別の家。</strong></p>
+<p>倉庫番は妻と夕食をとっていた。仕事を失ったことを話すと、妻は言った。</p>
+<p>「次は何をするの？」</p>
+<p>「まだ分からない」</p>
+<p>「後悔してる？」</p>
+<p>「鍵を開けたことか？」</p>
+<p>「そう」</p>
+<p>男は少し考えた。</p>
+<p>「次も、同じことをするかは分からん」</p>
+<p>「そうでしょうね」</p>
+<p>「でも、今朝のことは、しなかったことにはできない」</p>
+<p>戸が叩かれた。男は立ち上がった。</p>
+<p>外にいたのは、昨日まで一緒に荷を運んでいた若者だった。</p>
+<p>「別の船の仕事があります。来ませんか」</p>
+<p>男は妻を振り返った。</p>
+<p>「明日の朝、返事をする」</p>
+<p>戸を閉めると、妻が言った。</p>
+<p>「今度は、ちゃんと朝まで待ってね」</p>
+<p>男は笑った。</p></div></section>
+<section class="scene ancient" id="day-7-4" data-day="7"><div class="scene-heading"><p class="eyebrow">古代 <span>場面 4 / 4</span></p><h2 tabindex="-1">第七日　名前を呼ぶ</h2></div><figure><img src="photos/amathus.webp" alt="アマトゥスの遺跡" loading="lazy" decoding="async"><figcaption>アマトゥスの遺跡 ／ <a href="https://commons.wikimedia.org/wiki/File:Amathus-ruins-city.jpg">Shonagon（投稿者） · 出典</a> ／ パブリックドメイン ／ 縮小・表示時トリミング</figcaption></figure><div class="prose"><p><strong>紀元前306年頃。アマトゥス。</strong></p>
+<p>夜明け、ニコスの舟が戻った。小船の人々は全員ではなかったが、岸へ上がった者たちは歩けた。</p>
+<p>テアは水を運んだ。</p>
+<p>「港の見張りは？」</p>
+<p>「怒っている」</p>
+<p>「そりゃそうだろうね」</p>
+<p>「姉さんも？」</p>
+<p>「私は、船を直す人手が増えたと思ってる」</p>
+<p>ニコスは笑った。</p>
+<p>海の向こうでは、勝った王の旗が上がっていた。</p></div></section>
+<section class="scene modern" id="day-8-1" data-day="8"><div class="scene-heading"><p class="eyebrow">現代 · ニコシア <span>場面 1 / 4</span></p><h2 tabindex="-1">第八日　向こう側</h2></div><figure><img src="photos/nicosia.webp" alt="ニコシア旧市街、レドラ通り" loading="lazy" decoding="async"><figcaption>ニコシア旧市街、レドラ通り ／ <a href="https://commons.wikimedia.org/wiki/File:Ledra_Street.jpg">Alessio Bragadini · 出典</a> ／ <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC BY-SA 2.0</a> ／ 縮小・表示時トリミング</figcaption></figure><div class="prose"><p>律は荷物を車に積み、アランとニコシアへ向かった。今夜だけは旧市街に泊まる。</p>
+<p>「最後の日に、また国境？」</p>
+<p>「厳密には、説明が長くなる」</p>
+<p>「君が説明を省くなんて珍しい」</p>
+<p>「休暇の最後ぐらいはね」</p>
+<p>南側の旧市街を歩いた。狭い通りには日除けが張られ、店先には衣類や土産物が並んでいた。角を曲がるたびに違う言葉が聞こえた。律は小さな菓子を買い、包みを開ける前にアランにも一つ渡した。</p>
+<p>商店街の先で二人は身分証を出した。係員は確認し、通過を認めた。</p>
+<p>律は北側へ数歩進み、振り返った。</p>
+<p>「もっと物々しい場所かと思ってた」</p>
+<p>「何を期待していたんだい」</p>
+<p>「壁とか、兵士とか」</p>
+<p>「あるところにはあるよ」</p>
+<p>「でも、ここは普通の商店街だ」</p>
+<p>「商店街だからね」</p>
+<p>二人は笑った。</p>
+<p>少し先で、男性が係員と話していた。手に書類を持ち、何度も同じ方向を指している。</p>
+<p>「向こうに家族がいるんです。会って戻るだけです」</p>
+<p>係員は書類を返した。</p>
+<p>「その書類では、ここを通れません」</p>
+<p>男性はしばらく動かなかった。</p>
+<p>律とアランは足を止めたが、会話に割り込まなかった。男性は携帯端末を取り出し、誰かに短く連絡を送った。やがて、来た道を戻っていった。</p>
+<p>律は自分のパスポートをポケットに入れた。</p>
+<p>「僕たちは、あっさり通れたのに」</p>
+<p>「そうだね」</p>
+<p>「家族に会いに行くだけなのに」</p>
+<p>アランは答えなかった。</p>
+<p>昼食は北側の店でとった。中庭の木がテーブルに影を落とし、皿には香辛料の香りが残っていた。料理は温かく、店主はよく笑った。アランは食後のコーヒーを頼み、律は通りの向こうから聞こえる食器の音を聞いていた。律は少し前に見た男性のことを話しかけ、やめた。代わりにパンをちぎった。</p>
+<p>「君、またパンの食べ方に文句をつける？」</p>
+<p>「今日は許そう」</p>
+<p>「国境を越えると寛容になるんだね」</p>
+<p>「君は、僕がどこにいても同じ人間だと思っていたのかい？」</p>
+<p>「違うの？」</p>
+<p>「昼食の前と後では、ずいぶん違う」</p>
+<p>律は笑った。</p>
+<p>夕方、二人は旧市街の道を歩いた。軒先の灯りがつき始め、猫が店の椅子の下で眠っていた。律は今日撮った写真をアランに見せた。建物よりも、昼食の皿の写真が多かった。</p>
+<p>「考古学の旅としては失格だね」</p>
+<p>「休暇としては優秀だ」</p>
+<p>行き止まりになった通りの先に、建物の壁が見えた。反対側にも同じ空が広がっていた。</p></div></section>
+<section class="scene medieval" id="day-8-2" data-day="8"><div class="scene-heading"><p class="eyebrow">中世 <span>場面 2 / 4</span></p><h2 tabindex="-1">第八日　向こう側</h2></div><div class="prose"><p><strong>1231年。南岸の港町。処刑の知らせが届いてから数日後。</strong></p>
+<p>マリアは家の小箱に手紙をしまった。サラは隣で、ほつれた布を縫い直していた。</p>
+<p>「いつか渡せるかな」</p>
+<p>「分からない」</p>
+<p>「役人はもう来ないって」</p>
+<p>「今日はね」</p>
+<p>マリアは箱の蓋を閉じた。</p>
+<p>「名前を聞かれたら、今度は何て言う？」</p>
+<p>サラは針を止めた。</p>
+<p>「前と同じことを言うわ」</p>
+<p>「本当のこと？」</p>
+<p>「そう」</p>
+<p>「それで信じてもらえる？」</p>
+<p>サラはまた縫い始めた。</p>
+<p>外では子供たちが走り、誰かが魚の値段を怒鳴り、隣家から焼いたパンの匂いがした。</p>
+<p>戸が叩かれた。</p>
+<p>来たのは、港の仕事を失った倉庫番だった。手に縄の束を持っている。</p>
+<p>「明日から別の船に乗る。必要なものがあれば預かるよ」</p>
+<p>サラはしばらく男を見た。</p>
+<p>「預けるものなら、もうありません」</p>
+<p>「そうか」</p>
+<p>「でも、帰ってきたら食事に寄って」</p>
+<p>男はうなずいた。</p></div></section>
+<section class="scene ancient" id="day-8-3" data-day="8"><div class="scene-heading"><p class="eyebrow">古代 <span>場面 3 / 4</span></p><h2 tabindex="-1">第八日　向こう側</h2></div><figure><img src="photos/amathus.webp" alt="アマトゥスの遺跡" loading="lazy" decoding="async"><figcaption>アマトゥスの遺跡 ／ <a href="https://commons.wikimedia.org/wiki/File:Amathus-ruins-city.jpg">Shonagon（投稿者） · 出典</a> ／ パブリックドメイン ／ 縮小・表示時トリミング</figcaption></figure><div class="prose"><p><strong>紀元前306年頃。アマトゥス。</strong></p>
+<p>若い役人は、新しい港の計画を広げていた。海の王の伝承を記した欄に、赤い印がついている。</p>
+<p>「勝った王は、海の道を手に入れたがっている」</p>
+<p>テアは答えた。</p>
+<p>「道は持てないよ」</p>
+<p>「海を支配する方法なら、持てます」</p>
+<p>「そうだといいね」</p>
+<p>役人は苛立った。</p>
+<p>「あなたは、海の王が何を残したか知っているんですか」</p>
+<p>テアは首を振った。</p>
+<p>「知らないよ。私が知っているのは、波が高い日に船を出すと、帰りが遅くなることぐらいだ」</p>
+<p>役人は図面を巻いた。</p>
+<p>その夜、ニコスは子供に、小さな貝殻の船を渡した。</p>
+<p>「港を作ってみろ」</p>
+<p>子供は砂に溝を掘った。</p>
+<p>「どの船を入れる？」</p>
+<p>「好きな船」</p>
+<p>「それじゃ、港がいっぱいになるぞ」</p>
+<p>「大きくすればいい」</p>
+<p>ニコスは笑った。</p></div></section>
+<section class="scene modern" id="day-8-4" data-day="8"><div class="scene-heading"><p class="eyebrow">現代 <span>場面 4 / 4</span></p><h2 tabindex="-1">第八日　向こう側</h2></div><figure><img src="photos/nicosia.webp" alt="ニコシア旧市街、レドラ通り" loading="lazy" decoding="async"><figcaption>ニコシア旧市街、レドラ通り ／ <a href="https://commons.wikimedia.org/wiki/File:Ledra_Street.jpg">Alessio Bragadini · 出典</a> ／ <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC BY-SA 2.0</a> ／ 縮小・表示時トリミング</figcaption></figure><div class="prose"><p><strong>2061年。ニコシア。</strong></p>
+<p>ホテルへ戻る途中、律はアランに言った。</p>
+<p>「君の海の王は、国境を作ったと思う？」</p>
+<p>「僕の王じゃない」</p>
+<p>「じゃあ、誰の？」</p>
+<p>「知らない」</p>
+<p>「便利な答えだな」</p>
+<p>アランは立ち止まった。</p>
+<p>「でも、仮に互いの経験を直接共有できたとしても、争わないとは限らない」</p>
+<p>「なぜ？」</p>
+<p>「相手が何を望んでいるか分かっても、それを許せるとは限らないからだ」</p>
+<p>律は考えた。</p>
+<p>「そうだね」</p>
+<p>「失望した？」</p>
+<p>「いや。少し、面白くなった」</p>
+<p>「どうして？」</p>
+<p>「それでも、何か違う社会を作れたかもしれないから」</p>
+<p>二人はホテルへ歩いた。明日は早い。</p></div></section>
+<section class="scene modern" id="day-9-1" data-day="9"><div class="scene-heading"><p class="eyebrow">現代 · キプロス <span>場面 1 / 2</span></p><h2 tabindex="-1">第九日　帰る船</h2></div><div class="prose"><p>朝、律は荷物を閉め、アランに鍵を返した。</p>
+<p>「返す必要はない。ホテルの鍵だよ」</p>
+<p>「そうだった」</p>
+<p>「九日でずいぶん疲れたらしいね」</p>
+<p>「君の説明のせいだ」</p>
+<p>「ほとんど説明していない」</p>
+<p>「それが一番疲れる」</p>
+<p>ラルナカへ向かう道では、朝の光が低い建物の壁を照らしていた。車の窓から、海が見えたり隠れたりする。律は道沿いの看板を眺め、知らない店の名前をいくつか覚えた。次に来ることがあれば寄ろうと思い、すぐに忘れた。</p>
+<p>アランは第三巻の草稿について話した。</p>
+<p>「帰ったら、当時の研究者の別のノートを探してみる。どこまで分かるかは知らない」</p>
+<p>「もし本当に海の王がいたら？」</p>
+<p>「考古学者としては、まず証拠を見たい」</p>
+<p>「人間としては？」</p>
+<p>アランはしばらく考えた。</p>
+<p>「何を食べていたか、知りたいね」</p>
+<p>「そこ？」</p>
+<p>「文明を理解するなら、食卓からだろう」</p>
+<p>「海の中にテーブルが？」</p>
+<p>「また人間の家具を持ち込む」</p>
+<p>二人は笑った。</p>
+<p>空港の近くで、律は海を見た。船が沖を進んでいた。</p>
+<p>「結局、贈り物って何だったんだろう」</p>
+<p>「港かもしれない。海を読む知識かもしれない。あとから誰かが作った話かもしれない」</p>
+<p>「ずいぶん役に立たない答えだね」</p>
+<p>「君のために研究しているわけじゃない」</p>
+<p>「知ってる」</p>
+<p>アランは車を止めた。</p>
+<p>「楽しかったよ」</p>
+<p>「僕も。第三巻の続きを見つけたら知らせて」</p>
+<p>「もちろん。今度はちゃんと読める原稿だといいが」</p>
+<p>「休暇のあいだ、結局何も発見しなかったね」</p>
+<p>「ロゼの良い店を三軒見つけた。十分な成果だろう」</p>
+<p>「考古学者としては？」</p>
+<p>「休暇中だと言ったはずだよ。またどこかで」</p>
+<p>「今度は僕がニューヨークへ行こうか」</p>
+<p>「まともなクロワッサンの店を探しておく」</p>
+<p>「それなら、旅の目的ができた」</p>
+<p>律は荷物を持って降りた。アランの車が見えなくなるまで、少しだけ立っていた。</p>
+<p>搭乗口で、律は旅の写真を眺めた。海、石、パン、ワイン、古い港の図面。どれにも海の王は写っていない。</p>
+<p>もし、かつて海に、人間とは違う高度な知性がいたのだとしたら。</p>
+<p>彼らが何を作り、何を価値としたのか。陸で生き、言葉で意思を伝える人間がそれを理解するまで、どれほどの年月が必要なのだろう。律には見当もつかなかった。</p>
+<p>けれど、いまの人間は、数百年も隔絶していた文明の人々とさえ、VRとAGIを介して初めて会ったその場から言葉を交わせる。ならば、いつか人間も、互いの経験や意図を今より深く分かち合える社会を作れるのかもしれない。</p>
+<p>そのとき初めて、人類はペラギアンの遺産を受け取るのだろうか。</p>
+<p>律は端末を閉じた。</p>
+<p>搭乗案内が始まった。</p></div></section>
+<section class="scene ancient" id="day-9-2" data-day="9"><div class="scene-heading"><p class="eyebrow">古代 <span>場面 2 / 2</span></p><h2 tabindex="-1">第九日　帰る船</h2></div><div class="prose"><p><strong>紀元前332年。ティルス沖。</strong></p>
+<p>メノンは船の縁に座り、海を見ていた。救った男は、もう別の船に移された。どこへ連れて行かれたか分からない。</p>
+<p>隣の漕ぎ手が言った。</p>
+<p>「お前、あの男の名前を聞いたか」</p>
+<p>「聞いてない」</p>
+<p>「礼を言われたか」</p>
+<p>「言葉が分からなかった」</p>
+<p>「じゃあ、何も分からないまま助けたのか」</p>
+<p>メノンは答えた。</p>
+<p>「溺れているのは分かった」</p>
+<p>男は笑った。</p>
+<p>遠くの海面で、何かが一度だけ跳ねた。</p>
+<p>船は西へ向かっていた。</p>
+<p><strong>終</strong></p></div></section>
+  </div>
+  <nav class="pager" aria-label="場面送り" hidden>
+    <a class="action" id="previous" href="#cover">← 前へ</a>
+    <output id="position"></output>
+    <a class="action" id="next" href="#cover">次へ →</a>
+  </nav>
+</main>
+<footer>全九日シナリオ Ver. 1.2。写真は撮影時点のキプロスの風景・遺跡です。</footer>
+<script>
+const scenes = [...document.querySelectorAll(".scene")];
+const chapters = [...document.querySelectorAll(".contents a")];
+const cover = document.querySelector(".cover");
+const credit = document.querySelector("#cover-credit");
+const pager = document.querySelector(".pager");
+const previous = document.querySelector("#previous");
+const next = document.querySelector("#next");
+const position = document.querySelector("#position");
+
+function showScene(moveFocus) {
+  const index = scenes.findIndex(scene => "#" + scene.id === location.hash);
+  const current = scenes[index];
+  for (const scene of scenes) scene.hidden = scene !== current;
+  cover.hidden = credit.hidden = Boolean(current);
+  pager.hidden = !current;
+  for (const [day, chapter] of chapters.entries()) {
+    if (current?.dataset.day === String(day)) chapter.setAttribute("aria-current", "true");
+    else chapter.removeAttribute("aria-current");
+  }
+  if (!current) {
+    if (moveFocus) window.scrollTo(0, 0);
+    return;
+  }
+  previous.href = scenes[index - 1] ? "#" + scenes[index - 1].id : "#cover";
+  next.href = scenes[index + 1] ? "#" + scenes[index + 1].id : "#cover";
+  previous.textContent = index === 0 ? "← 表紙" : "← 前へ";
+  next.textContent = index === scenes.length - 1 ? "表紙へ →" : "次へ →";
+  position.textContent = (index + 1) + " / " + scenes.length;
+  if (moveFocus) {
+    document.querySelector(".contents").open = false;
+    current.querySelector("h2").focus({preventScroll: true});
+    current.scrollIntoView({block: "start"});
+  }
+}
+
+window.addEventListener("hashchange", () => showScene(true));
+showScene(Boolean(location.hash));
+</script>
+</body>
+</html>
