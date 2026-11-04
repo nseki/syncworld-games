@@ -53,6 +53,7 @@ figcaption { padding: 8px clamp(18px, 5vw, 49px) 0; }
 .prose { margin: auto; max-width: 760px; padding: clamp(20px, 5vw, 48px); font: clamp(1.04rem, 2.3vw, 1.24rem)/2.02 var(--serif); line-break: strict; overflow-wrap: anywhere; }
 .prose p { margin: 0 0 .95em; }
 .prose p:last-child { margin: 0; }
+.prose { cursor: pointer; touch-action: manipulation; }
 .pager { display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; align-items: center; margin-bottom: 22px; }
 .pager .action:first-child { justify-self: start; background: #dde7da; color: var(--ink); }
 .pager .action:last-child { justify-self: end; }
@@ -808,6 +809,18 @@ function showScene(moveFocus) {
     current.scrollIntoView({block: "start"});
   }
 }
+
+// Tap the story text to advance, as in The Voynich XCrossings reader.
+// Keep links, text selection and other interactive elements usable.
+document.querySelector("#reader").addEventListener("click", event => {
+  const prose = event.target.closest(".prose");
+  if (!prose || prose.closest(".scene")?.hidden) return;
+  if (event.target.closest("a, button, input, select, textarea, summary, [contenteditable]")) return;
+  if (window.getSelection()?.toString().trim()) return;
+  const index = scenes.findIndex(scene => scene === prose.closest(".scene"));
+  if (index < 0) return;
+  location.hash = scenes[index + 1] ? scenes[index + 1].id : "cover";
+});
 
 window.addEventListener("hashchange", () => showScene(true));
 showScene(Boolean(location.hash));
