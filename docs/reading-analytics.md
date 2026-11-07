@@ -9,14 +9,14 @@ Create the following dimensions, each with scope **Event**. Enter the event para
 
 | Dimension name | Event parameter |
 | --- | --- |
-| 作品ID | work_id |
-| 作品名 | work_title |
-| ルートID | route_id |
-| 章ID | chapter_id |
-| 章タイトル | chapter_title |
-| 本文リビジョン | content_revision |
-| 読書開始方法 | entry_method |
-| 遷移先ルートID | destination_route |
+| Work ID | work_id |
+| Work Title | work_title |
+| Route ID | route_id |
+| Chapter ID | chapter_id |
+| Chapter Title | chapter_title |
+| Content Revision | content_revision |
+| Reading Entry Method | entry_method |
+| Destination Route ID | destination_route |
 
 `work_id = the-voynich-xcrossings`; route IDs: `common`, `rana`, `misha`, `mio`, `ritsu`.
 Chapter IDs are route-local sequential identifiers, e.g. `mio-01`. Frontmatter is `frontmatter`. Compare revisions separately if chapter ordering changes.
