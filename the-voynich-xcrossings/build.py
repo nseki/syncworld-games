@@ -21,6 +21,8 @@ route_versions = {slug: slug+'-draft4-reader-v1' for slug, _ in route_names}
 progress_versions = [story['progressVersion'], *route_versions.values()]
 def build(story, destination):
  story['progressVersions'] = progress_versions
+ story['workId'] = 'the-voynich-xcrossings'
+ story['routeId'] = destination.parent.name if destination.parent != ROOT else 'common'
  base = './' if destination.parent == ROOT else '../'
  story['assetBase'] = base + 'assets/'
  story['navigation'] = [{'url':base+target+'?draft=6','label':label} for target,label in [('rana/','第五部　ラーナルート'),('misha/','第六部　ミーシャルート'),('mio/','第七部　澪ルート'),('ritsu/','第八部　律の後日譚')]]
@@ -46,7 +48,7 @@ def build(story, destination):
   '/*__CSS__*/':(ROOT/'src/reader.css').read_text(),
   '/*__STORY__*/':json.dumps(story,ensure_ascii=False).replace('<',chr(92)+'u003c'),
   '/*__CORE__*/':(ROOT/'src/reader-core.js').read_text(),
-  '/*__APP__*/':(ROOT/'src/app.js').read_text()
+  '/*__APP__*/':(ROOT/'src/analytics.js').read_text()+'\n'+(ROOT/'src/app.js').read_text()
  }.items():
   assert html.count(marker)==1, marker
   html = html.replace(marker,value)
