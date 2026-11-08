@@ -2,6 +2,15 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-M7PJD05WLR"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-M7PJD05WLR', new URLSearchParams(location.search).get('debug_mode') === '1' ? {debug_mode: true} : {});
+</script>
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <meta name="description" content="キプロスの実景写真とともに読む『ペラギアンの遺産』全九日シナリオ Ver. 2.1">
@@ -875,10 +884,62 @@ const previous = document.querySelector("#previous");
 const next = document.querySelector("#next");
 const position = document.querySelector("#position");
 
-function showScene(moveFocus) {
+
+// Match VXC's event names, shared dimensions and per-document deduplication.
+// A day is a chapter; a scene is a page. Day 0 is the prologue.
+const readingAnalytics = (() => {
+  const base = {
+    work_id: 'pelagian-legacy', story_id: 'pelagian-legacy',
+    work_title: 'ペラギアンの遺産', route_id: 'common', content_revision: '2.1'
+  };
+  const visitedChapters = new Set();
+  let started = false, completed = false, lastScene = null;
+  function emit(name, params) {
+    try {
+      if (typeof window.gtag === 'function') window.gtag('event', name, {...base, ...params});
+    } catch (_) {} // Analytics must never interrupt reading.
+  }
+  return {
+    view(scene, index, reason) {
+      if (!scene) { lastScene = null; return; }
+      const params = {
+        chapter_id: 'common-' + String(Number(scene.dataset.day) + 1).padStart(2, '0'),
+        chapter_title: scene.querySelector('h2').textContent,
+        page_number: index + 1, page_count: scenes.length,
+        scene_id: scene.id, day_number: Number(scene.dataset.day),
+        progress_percent: Math.round((index + 1) / scenes.length * 100)
+      };
+      if (!started) { started = true; emit('reading_start', {...params, entry_method: reason === 'initial' || reason === 'history' ? 'bookmark' : 'start'}); }
+      if (lastScene !== scene.id) emit('reading_page_view', params);
+      lastScene = scene.id;
+      if (!visitedChapters.has(params.chapter_id)) {
+        visitedChapters.add(params.chapter_id);
+        emit('reading_chapter_view', params);
+      }
+      if (index === scenes.length - 1 && reason === 'next' && !completed) {
+        completed = true;
+        emit('reading_route_complete', params);
+      }
+    }
+  };
+})();
+let pendingReadingNavigation = null;
+// Observe existing links without changing their navigation or URLs.
+document.addEventListener('click', event => {
+  const link = event.target.closest('a[href^="#"]');
+  if (!link || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+  pendingReadingNavigation = {
+    from: location.hash, to: link.getAttribute('href'),
+    reason: link === next ? 'next' : link === previous ? 'previous' :
+      link.closest('.contents') ? 'toc' : 'start'
+  };
+}, true);
+
+function showScene(moveFocus, reason = 'initial') {
   const index = scenes.findIndex(scene => "#" + scene.id === location.hash);
   const current = scenes[index];
   for (const scene of scenes) scene.hidden = scene !== current;
+  readingAnalytics.view(current, index, reason);
   cover.hidden = credit.hidden = Boolean(current);
   pager.hidden = !current;
   for (const [day, chapter] of chapters.entries()) {
@@ -910,10 +971,18 @@ document.querySelector("#reader").addEventListener("click", event => {
   if (window.getSelection()?.toString().trim()) return;
   const index = scenes.findIndex(scene => scene === prose.closest(".scene"));
   if (index < 0) return;
-  location.hash = scenes[index + 1] ? scenes[index + 1].id : "cover";
+  const target = scenes[index + 1] ? scenes[index + 1].id : "cover";
+  pendingReadingNavigation = {from: location.hash, to: "#" + target, reason: 'next'};
+  location.hash = target;
 });
 
-window.addEventListener("hashchange", () => showScene(true));
+window.addEventListener("hashchange", event => {
+  const navigation = pendingReadingNavigation;
+  pendingReadingNavigation = null;
+  const reason = navigation && navigation.from === new URL(event.oldURL).hash &&
+    navigation.to === new URL(event.newURL).hash ? navigation.reason : 'history';
+  showScene(true, reason);
+});
 showScene(Boolean(location.hash));
 </script>
 </body>
