@@ -31,7 +31,7 @@ Chapter IDs are route-local sequential identifiers, e.g. `mio-01`. Frontmatter i
 
 All events carry work, route, chapter and content revision. Page events also carry numeric `page_number` and `page_count`; these depend on the reader's page length setting and should not be registered as dimensions. No reading-time metric is collected. Events are per document load, not unique users or sessions. Blocked analytics never prevents reading. No new persistent storage is used.
 
-Existing page_view configuration remains unchanged; no synthetic page_view or config call is added. Existing historical data and browser progress keys/migrations are untouched. Registration does not backfill past custom-dimension reports. The new reading events currently cover VXC only; Pelagian Legacy remains unchanged.
+Existing page_view configuration remains unchanged; no synthetic page_view or config call is added. Existing historical data and browser progress keys/migrations are untouched. Registration does not backfill past custom-dimension reports. The VXC configuration is unchanged. Pelagian Legacy now loads the same measurement ID once and sends the compatible reading events described below.
 
 ## Build and verification
 
@@ -49,3 +49,14 @@ After publication, verify the events in GA4 Realtime / DebugView (enable debug m
 References:
 - https://support.google.com/analytics/answer/14239696
 - https://developers.google.com/analytics/devguides/collection/ga4/event-parameters
+
+## Pelagian Legacy
+
+The hand-authored `pelagian-legacy/index.html` uses `work_id` and `story_id` = `pelagian-legacy`, `work_title` = `ペラギアンの遺産`, `route_id` = `common`, and `content_revision` = `2.1`.
+It has 24 fixed scene pages across a prologue (day 0) and nine days. Chapter IDs follow VXC's sequential convention: `common-01` is the prologue, `common-02` is day 1, and `common-10` is day 9.
+
+Events: `reading_start`, `reading_page_view`, `reading_chapter_view`, `reading_route_complete`. There are no route choices, so no route-select event is emitted. Shared chapter/page parameters match VXC. Additional parameters are `scene_id`, numeric `day_number`, and numeric `progress_percent` (displayed scene position / 24, rounded). Progress describes position, including TOC jumps; it does not prove every preceding scene was read.
+
+The cover sends only GA4's normal page_view. Reading starts on the first displayed scene with entry_method `start` for reader links, or `bookmark` for direct hashes/history. Start, chapter views and completion are deduplicated per document load, matching VXC; revisiting a different scene sends another page view. Reloading begins a new document. Completion requires next-link or prose-tap navigation into the final scene; direct links, TOC and browser history do not count. All existing reader URLs and navigation remain intact.
+
+For DebugView open https://games.syncworld.net/pelagian-legacy/?debug_mode=1 and then start reading. The query parameter enables debug_mode only for this page load; remove it for normal use. In GA4 Admin → Data display → DebugView select your device, inspect the four events and their work/chapter/page parameters. Test next, previous, TOC, prose taps, browser history, and a direct final-scene URL. Real GA4 receipt still requires this account-side verification.
