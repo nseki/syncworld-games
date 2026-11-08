@@ -10,7 +10,7 @@ SyncWorld作品のWeb試読版を公開する静的サイトです。リポジ�
 | ペラギアンの遺産 | Ver. 2.1。序章と九日間の24場面。写真、目次、前後リンク・本文タップ、ハッシュURLによる場面移動 | <https://games.syncworld.net/pelagian-legacy/> |
 | ニューヨークのシングルファザーが行く | 第1巻・第1稿、全4話の静的HTML | <https://games.syncworld.net/ny-single-father/> |
 
-VXCの個別URLは `the-voynich-xcrossings/` 以下の `rana/`、`misha/`、`mio/`、`ritsu/`。澪エンド後に律の後日譚が続きます。操作の詳細は[作品README](the-voynich-xcrossings/README.md)も参照してください。ただし同文書には第5稿の記述が残っており、現行版は `build.py` と生成HTMLの第6稿です。作品一覧にもペラギアンの旧版表記（1.2）が残っていますが、作品ページは2.1です。
+VXCの個別URLは `the-voynich-xcrossings/` 以下の `rana/`、`misha/`、`mio/`、`ritsu/`。澪エンド後に律の後日譚が続きます。操作の詳細は[作品README](the-voynich-xcrossings/README.md)も参照してください。作品一覧にもペラギアンの旧版表記（1.2）が残っていますが、作品ページは2.1です。
 
 ## ディレクトリ
 
