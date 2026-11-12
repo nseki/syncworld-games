@@ -1,12 +1,13 @@
 # GA4読書イベント仕様・運用
 
-確認基準: main `8cb712189c6f098399626c545caad91385b82f6b`。本書は既存実装の説明であり、イベント名・発火処理を変更しません。測定IDは **G-M7PJD05WLR**。
+測定IDは **G-M7PJD05WLR**。
 
 ## 実装の所在と対象
 
 - VXC: [analytics.js](../the-voynich-xcrossings/src/analytics.js) が状態と送信パラメータを管理し、[app.js](../the-voynich-xcrossings/src/app.js) が表示・移動・ルートリンク操作から呼び出します。[build.py](../the-voynich-xcrossings/build.py) が共通部と4ルートのHTMLへ埋め込み、[template.html](../the-voynich-xcrossings/src/template.html) がGoogleタグを1回設定します。
 - ペラギアン: [index.html](../pelagian-legacy/index.html) のGoogleタグ、`readingAnalytics`、`showScene`、リンク監視・本文タップ・`hashchange` が実装です。別ビルドはありません。
-- [作品一覧](../index.html) にはGoogleタグ設定がありますが読書イベントはありません。VXCの人物一覧・図版クレジット、ニューヨーク作品にも独自読書イベントはありません。ニューヨーク作品にはGoogleタグもありません。
+- ニューヨーク: [reader.js](../ny-isekai/reader.js) が見出し単位の改ページとGA4への送信を担当します。
+- [作品一覧](../index.html) にはGoogleタグ設定がありますが読書イベントはありません。VXCの人物一覧・図版クレジットにも独自読書イベントはありません。
 - `gtag('event', name, params)` による追加イベントです。章・場面表示のたびに独自の `page_view` は送りません。通常の `page_view` やGA4拡張計測の挙動・設定は、これらの読書イベントとは別です。
 
 ## イベントと発火条件
@@ -21,7 +22,16 @@
 
 **未実装のイベント名:** `chapter_view`、`chapter_navigation`、`reading_progress`、`chapter_complete`、`story_complete`。これらの名前で送信すると仮定してレポートを作らないでください。`reading_chapter_view` は章への到達であり章の読了ではありません。`progress_percent` はペラギアンのパラメータで、独立した進捗イベントではありません。
 
-## パラメータ
+## ニューヨークは異世界だった
+
+- `reading_start` は最初のページ表示時に1回送信します。見出しへの直リンクは `entry_method: bookmark`、通常の入口は `start` です。
+- `reading_page_view` は初回と表示ページが変わったときに送信します。前後移動、目次、ブラウザーの履歴を含みます。目次を開くだけでは送信しません。
+- `reading_chapter_view` は第1〜7話と巻末おまけの各初回表示で送信します。話の中で改ページしても章IDは共通です。
+- `reading_route_complete` は「次へ」で最終ページ「次のチュートリアル」に到達したときに1回送信します。直リンク、目次、履歴での到達では送信しません。分岐がないため `reading_route_select` は送信しません。
+- 共通パラメータは `work_id: ny-isekai`、`work_title: ニューヨークは異世界だった`、`route_id: common`、`content_revision: v1.3a`、`chapter_id`（`tutorial`、`chapter-1`〜`chapter-7`、`bonus`、`next-tutorial`）、`chapter_title`、`page_number`（1〜46）、`page_count`（46）です。
+- DebugViewでは [デバッグ用URL](https://games.syncworld.net/ny-isekai/?debug_mode=1) を開き、話内の前後移動、目次、履歴、末尾への前進と直リンクを確認します。
+
+## VXC・ペラギアンのパラメータ
 
 両作品の表示系イベントには以下を付けます。VXCのルート選択は最後に表示したページの章・ページ情報を引き継ぎ、`destination_route` を追加します。
 
@@ -60,12 +70,12 @@ GA4の「管理 → データの表示 → カスタム定義」で既存登録�
 
 | 表示名 | イベントパラメータ | 対象 |
 | --- | --- | --- |
-| Work ID | `work_id` | 両作品・作品横断集計の基本 |
-| Work Title | `work_title` | 両作品 |
-| Route ID | `route_id` | 両作品 |
-| Chapter ID | `chapter_id` | 両作品 |
-| Chapter Title | `chapter_title` | 両作品 |
-| Content Revision | `content_revision` | 両作品 |
+| Work ID | `work_id` | 全3作品・作品横断集計の基本 |
+| Work Title | `work_title` | 全3作品 |
+| Route ID | `route_id` | 全3作品 |
+| Chapter ID | `chapter_id` | 全3作品 |
+| Chapter Title | `chapter_title` | 全3作品 |
+| Content Revision | `content_revision` | 全3作品 |
 | Reading Entry Method | `entry_method` | 開始イベント |
 | Destination Route ID | `destination_route` | VXCのルート選択 |
 | Story ID | `story_id` | 必要なら追加。ペラギアンのみ |
@@ -79,14 +89,14 @@ GA4の「管理 → データの表示 → カスタム定義」で既存登録�
 
 ローカルテストが確認するのは発火ロジックであり、GA4側の受信ではありません。公開後、対象プロパティへアクセスできるアカウントで次を確認します。
 
-1. ペラギアンは <https://games.syncworld.net/pelagian-legacy/?debug_mode=1> を開きます。このページだけがクエリを解釈し、Googleタグのconfigに `debug_mode: true` を渡します。VXCにはこのクエリ処理がないため、Google Tag Assistantで対象URLのデバッグを有効にします。
+1. ペラギアンは <https://games.syncworld.net/pelagian-legacy/?debug_mode=1> を開きます。ペラギアンとニューヨークのリーダーはクエリを解釈し、Googleタグのconfigに `debug_mode: true` を渡します。VXCにはこのクエリ処理がないため、Google Tag Assistantで対象URLのデバッグを有効にします。
 2. GA4「管理 → データの表示 → DebugView」で対象デバイスを選択し、イベントを開いて測定先・上表のパラメータを確認します。通常の `page_view` と `reading_page_view` を区別します。
 3. VXCは共通部・4ルートで初期表示、保存位置からの再開、ハッシュ直リンクを確認。開始方法が一致すること、目次で初回章だけ章イベントが出ること、同じ章内の往復はページ閲覧だけ増えることを確認します。
 4. VXCの文字サイズ・明暗変更は読書イベントを増やさず、ページ長変更は `reading_page_view` と完了を増やさないことを確認（未訪問章表示の章イベントは例外）。目次と末尾のルートリンクで `destination_route` を確認します。
 5. ペラギアンは表紙だけでは読書イベントがないこと、開始後の3イベント、前後・目次・本文タップ・履歴移動、日が変わると章イベントが出ること、表紙往復の扱いを確認します。
 6. 各作品で新規読み込みして末尾へ直リンク・目次移動すると完了が出ないこと、末尾直前から前進すると `reading_route_complete` が1回出ること、同じ読み込みで再到達しても増えず、リロード後は再計上できることを確認します。
 7. ペラギアンで100%表示位置でも直リンクなら完了イベントがないこと、VXCには `story_id` がないこと、未実装イベント名が送られないことを確認します。
-8. 検証後はペラギアンの `debug_mode` クエリを削除して読み直し、Tag Assistantを終了します。イベント遮断時はブラウザーの通信・同意状態等も確認します。
+8. 検証後はペラギアン・ニューヨークの `debug_mode` クエリを削除して読み直し、Tag Assistantを終了します。イベント遮断時はブラウザーの通信・同意状態等も確認します。
 
 公式: [DebugView・Tag Assistant・デバッグ解除](https://support.google.com/analytics/answer/7201382?hl=ja)。本書更新時点ではGA4アカウントでの実受信・カスタム定義登録状態は未検証です。
 
@@ -99,4 +109,4 @@ GA4の「管理 → データの表示 → カスタム定義」で既存登録�
 5. VXCは `python3 the-voynich-xcrossings/build.py` と `node --test the-voynich-xcrossings/tests/*.cjs` を実行。新作品の発火・非発火・重複防止と計測遮断時の読書操作を確認し、生成差分をレビューします。
 6. mainへ公開し、上記DebugView検証を行い、実装済みイベント・対応作品・未実装項目を本書へ反映します。単に作品リンクを追加しても計測は自動追加されません。
 
-既存の英語概要は [reading-analytics.md](reading-analytics.md) に残しています。本書は両作品の詳細な条件・差異を補足する運用文書です。
+既存の英語概要は [reading-analytics.md](reading-analytics.md) に残しています。本書は作品ごとの詳細な条件を補足する運用文書です。
