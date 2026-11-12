@@ -25,9 +25,9 @@
 ## ニューヨークは異世界だった
 
 - `reading_start` は最初のページ表示時に1回送信します。見出しへの直リンクは `entry_method: bookmark`、通常の入口は `start` です。
-- `reading_page_view` は初回と表示ページが変わったときに送信します。前後移動、目次、ブラウザーの履歴を含みます。目次を開くだけでは送信しません。
+- `reading_page_view` は初回と表示ページが変わったときに送信します。前後移動、本文タップ、目次、ブラウザーの履歴を含みます。目次を開くだけでは送信しません。
 - `reading_chapter_view` は第1〜7話と巻末おまけの各初回表示で送信します。話の中で改ページしても章IDは共通です。
-- `reading_route_complete` は「次へ」で最終ページ「次のチュートリアル」に到達したときに1回送信します。直リンク、目次、履歴での到達では送信しません。分岐がないため `reading_route_select` は送信しません。
+- `reading_route_complete` は「次へ」または本文タップで最終ページ「次のチュートリアル」に到達したときに1回送信します。直リンク、目次、履歴での到達では送信しません。分岐がないため `reading_route_select` は送信しません。
 - 共通パラメータは `work_id: ny-isekai`、`work_title: ニューヨークは異世界だった`、`route_id: common`、`content_revision: v1.3a`、`chapter_id`（`tutorial`、`chapter-1`〜`chapter-7`、`bonus`、`next-tutorial`）、`chapter_title`、`page_number`（1〜46）、`page_count`（46）です。
 - DebugViewでは [デバッグ用URL](https://games.syncworld.net/ny-isekai/?debug_mode=1) を開き、話内の前後移動、目次、履歴、末尾への前進と直リンクを確認します。
 

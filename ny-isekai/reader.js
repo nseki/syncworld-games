@@ -65,9 +65,19 @@
   }
 
   document.querySelector('main').addEventListener('click', event => {
-    const link = event.target.closest('a[href^="#"]');
-    if (!link || event.defaultPrevented || event.button !== 0 ||
+    if (event.defaultPrevented || event.button !== 0 ||
         event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+
+    const link = event.target.closest('a[href^="#"]');
+    if (!link) {
+      const page = event.target.closest('[data-chapter]');
+      if (page === currentPage &&
+          !event.target.closest('footer, a, button, input, select, textarea, summary, [contenteditable]') &&
+          !window.getSelection()?.toString().trim()) {
+        page.querySelector('[data-next]')?.click();
+      }
+      return;
+    }
 
     if (link.hash === '#contents') {
       contents.open = true;
