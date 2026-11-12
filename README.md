@@ -8,7 +8,7 @@ SyncWorld作品のWeb試読版を公開する静的サイトです。リポジ�
 | --- | --- | --- |
 | The Voynich XCrossings（VXC） | 第6稿。共通部とラーナ・ミーシャ・澪・律の5リーダー。目次、文字サイズ・ページ長・明暗設定、読書位置保存、人物一覧 | <https://games.syncworld.net/the-voynich-xcrossings/> |
 | ペラギアンの遺産 | Ver. 2.1。序章と九日間の24場面。写真、目次、前後リンク・本文タップ、ハッシュURLによる場面移動 | <https://games.syncworld.net/pelagian-legacy/> |
-| ニューヨークのシングルファザーが行く | 第1巻・第1稿、全4話の静的HTML | <https://games.syncworld.net/ny-single-father/> |
+| ニューヨークは異世界だった | 第1巻（Vol. 1）Web試読版 v1.3a。全7話と巻末おまけ、前後のチュートリアルを収録。目次から各項目へ移動 | <https://games.syncworld.net/ny-isekai/> |
 
 VXCの個別URLは `the-voynich-xcrossings/` 以下の `rana/`、`misha/`、`mio/`、`ritsu/`。澪エンド後に律の後日譚が続きます。操作の詳細は[作品README](the-voynich-xcrossings/README.md)も参照してください。作品一覧にもペラギアンの旧版表記（1.2）が残っていますが、作品ページは2.1です。
 
@@ -33,7 +33,7 @@ README.md
  pelagian-legacy/
    index.html                    # 本文・CSS・読書UI・計測を含む手編集HTML
    photos/                       # WebP写真
- ny-single-father/index.html      # 手編集HTML
+ ny-isekai/index.html             # 第1巻 v1.3a の本文・目次を収録した静的HTML
 ```
 
 ## ビルドと確認
