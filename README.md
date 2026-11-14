@@ -8,7 +8,8 @@ SyncWorld作品のWeb試読版を公開する静的サイトです。リポジ�
 | --- | --- | --- |
 | The Voynich XCrossings（VXC） | 第6稿。共通部とラーナ・ミーシャ・澪・律の5リーダー。目次、文字サイズ・ページ長・明暗設定、読書位置保存、人物一覧 | <https://games.syncworld.net/the-voynich-xcrossings/> |
 | ペラギアンの遺産 | Ver. 2.1。序章と九日間の24場面。写真、目次、前後リンク・本文タップ、ハッシュURLによる場面移動 | <https://games.syncworld.net/pelagian-legacy/> |
-| ニューヨークは異世界だった | 第1巻（Vol. 1）Web試読版 v1.4a。全7話と巻末おまけ、前後のチュートリアルを収録。見出し単位の54ページ、目次・前後移動・本文タップ、GA4読書イベント | <https://games.syncworld.net/ny-isekai/> |
+| ニューヨークは異世界だった 第1巻 | Web試読版 v1.4a。全7話と巻末おまけ、前後のチュートリアルを収録。見出し単位の54ページ、目次・前後移動・本文タップ、GA4読書イベント | <https://games.syncworld.net/ny-isekai/vol-1/> |
+| ニューヨークは異世界だった 第2巻 | Web試読版 v0.6。全7話と巻末おまけ、前後のチュートリアルを収録。全43ページ、目次・前後移動・本文タップ、GA4読書イベント | <https://games.syncworld.net/ny-isekai/vol-2/> |
 
 VXCの個別URLは `the-voynich-xcrossings/` 以下の `rana/`、`misha/`、`mio/`、`ritsu/`。澪エンド後に律の後日譚が続きます。操作の詳細は[作品README](the-voynich-xcrossings/README.md)も参照してください。作品一覧にもペラギアンの旧版表記（1.2）が残っていますが、作品ページは2.1です。
 
@@ -34,8 +35,13 @@ README.md
    index.html                    # 本文・CSS・読書UI・計測を含む手編集HTML
    photos/                       # WebP写真
  ny-isekai/
-   index.html                    # 第1巻 v1.4a の本文・目次
-   reader.js                     # 改ページ・GA4読書イベント
+   index.html                    # 第1巻・第2巻の巻一覧
+   vol-1/
+     index.html                  # 第1巻 v1.4a の本文・目次
+     reader.js                   # 第1巻の改ページ・GA4読書イベント
+   vol-2/
+     index.html                  # 第2巻 v0.6 の本文・目次（全43ページ）
+     reader.js                   # 第2巻の改ページ・GA4読書イベント
 ```
 
 ## ビルドと確認
@@ -48,7 +54,7 @@ node --test the-voynich-xcrossings/tests/*.cjs
 python3 -m http.server 8000
 ```
 
-ブラウザーで `http://localhost:8000/` を開き、各作品・ルートの目次、前後移動、画像、VXCの再開・設定を確認します。VXCのソースを更新した場合は、共通部・4ルート・人物一覧の生成HTMLも差分を確認してコミットします。ペラギアンとニューヨーク作品にはビルドスクリプトがなく、HTMLを直接更新します。
+ブラウザーで `http://localhost:8000/` を開き、各作品・ルートの目次、前後移動、画像、VXCの再開・設定を確認します。VXCのソースを更新した場合は、共通部・4ルート・人物一覧の生成HTMLも差分を確認してコミットします。ペラギアンとニューヨーク作品にはビルドスクリプトがなく、HTMLを直接更新します。ニューヨーク作品は各巻の `index.html` と `reader.js` に加え、巻一覧・サイトトップ・本READMEの版表記を揃えます。
 
 ## 公開
 
