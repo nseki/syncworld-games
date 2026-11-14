@@ -6,7 +6,7 @@
 
 - VXC: [analytics.js](../the-voynich-xcrossings/src/analytics.js) が状態と送信パラメータを管理し、[app.js](../the-voynich-xcrossings/src/app.js) が表示・移動・ルートリンク操作から呼び出します。[build.py](../the-voynich-xcrossings/build.py) が共通部と4ルートのHTMLへ埋め込み、[template.html](../the-voynich-xcrossings/src/template.html) がGoogleタグを1回設定します。
 - ペラギアン: [index.html](../pelagian-legacy/index.html) のGoogleタグ、`readingAnalytics`、`showScene`、リンク監視・本文タップ・`hashchange` が実装です。別ビルドはありません。
-- ニューヨーク: [reader.js](../ny-isekai/reader.js) が見出し単位の改ページとGA4への送信を担当します。
+- ニューヨーク: 第1巻の [reader.js](../ny-isekai/vol-1/reader.js) と第2巻の [reader.js](../ny-isekai/vol-2/reader.js) が、それぞれ見出し単位の改ページとGA4への送信を担当します。
 - [作品一覧](../index.html) にはGoogleタグ設定がありますが読書イベントはありません。VXCの人物一覧・図版クレジットにも独自読書イベントはありません。
 - `gtag('event', name, params)` による追加イベントです。章・場面表示のたびに独自の `page_view` は送りません。通常の `page_view` やGA4拡張計測の挙動・設定は、これらの読書イベントとは別です。
 
@@ -28,8 +28,8 @@
 - `reading_page_view` は初回と表示ページが変わったときに送信します。前後移動、本文タップ、目次、ブラウザーの履歴を含みます。目次を開くだけでは送信しません。
 - `reading_chapter_view` は第1〜7話と巻末おまけの各初回表示で送信します。話の中で改ページしても章IDは共通です。
 - `reading_route_complete` は「次へ」または本文タップで最終ページ「次のチュートリアル」に到達したときに1回送信します。直リンク、目次、履歴での到達では送信しません。分岐がないため `reading_route_select` は送信しません。
-- 共通パラメータは `work_id: ny-isekai`、`work_title: ニューヨークは異世界だった`、`route_id: common`、`content_revision: v1.3a`、`chapter_id`（`tutorial`、`chapter-1`〜`chapter-7`、`bonus`、`next-tutorial`）、`chapter_title`、`page_number`（1〜46）、`page_count`（46）です。
-- DebugViewでは [デバッグ用URL](https://games.syncworld.net/ny-isekai/?debug_mode=1) を開き、話内の前後移動、目次、履歴、末尾への前進と直リンクを確認します。
+- 共通パラメータは `work_title: ニューヨークは異世界だった`、`route_id: common`、`chapter_id`（`tutorial`、`chapter-1`〜`chapter-7`、`bonus`、`next-tutorial`）、`chapter_title`、`page_number`、`page_count` です。第1巻は `work_id: ny-isekai`、`content_revision: v1.4a`、第2巻は `work_id: ny-isekai-vol-2`、`content_revision: v0.6`、`page_count: 43` を送信します。
+- DebugViewでは [第1巻](https://games.syncworld.net/ny-isekai/vol-1/?debug_mode=1) または [第2巻](https://games.syncworld.net/ny-isekai/vol-2/?debug_mode=1) を開き、話内の前後移動、目次、履歴、末尾への前進と直リンクを確認します。
 
 ## VXC・ペラギアンのパラメータ
 
