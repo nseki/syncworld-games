@@ -13,7 +13,7 @@
         work_id: 'ny-isekai-vol-2',
         work_title: 'ニューヨークは異世界だった',
         route_id: 'common',
-        content_revision: 'v0.3',
+        content_revision: 'v0.6',
         chapter_id: page.dataset.chapter,
         chapter_title: page.dataset.chapterTitle,
         page_number: pages.indexOf(page) + 1,
