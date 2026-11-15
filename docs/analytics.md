@@ -28,7 +28,7 @@
 - `reading_page_view` は初回と表示ページが変わったときに送信します。前後移動、本文タップ、目次、ブラウザーの履歴を含みます。目次を開くだけでは送信しません。
 - `reading_chapter_view` は第1〜7話と巻末おまけの各初回表示で送信します。話の中で改ページしても章IDは共通です。
 - `reading_route_complete` は「次へ」または本文タップで最終ページ「次のチュートリアル」に到達したときに1回送信します。直リンク、目次、履歴での到達では送信しません。分岐がないため `reading_route_select` は送信しません。
-- 共通パラメータは `work_title: ニューヨークは異世界だった`、`route_id: common`、`chapter_id`（`tutorial`、`chapter-1`〜`chapter-7`、`bonus`、`next-tutorial`）、`chapter_title`、`page_number`、`page_count` です。第1巻は `work_id: ny-isekai`、`content_revision: v1.4a`、第2巻は `work_id: ny-isekai-vol-2`、`content_revision: v0.6`、`page_count: 43` を送信します。
+- 共通パラメータは `work_title: ニューヨークは異世界だった`、`route_id: common`、`chapter_id`（`tutorial`、`chapter-1`〜`chapter-7`、`bonus`、`next-tutorial`）、`chapter_title`、`page_number`、`page_count` です。第1巻は `work_id: ny-isekai`、`content_revision: v1.5a`、第2巻は `work_id: ny-isekai-vol-2`、`content_revision: v0.7`、`page_count: 43` を送信します。
 - DebugViewでは [第1巻](https://games.syncworld.net/ny-isekai/vol-1/?debug_mode=1) または [第2巻](https://games.syncworld.net/ny-isekai/vol-2/?debug_mode=1) を開き、話内の前後移動、目次、履歴、末尾への前進と直リンクを確認します。
 
 ## VXC・ペラギアンのパラメータ
